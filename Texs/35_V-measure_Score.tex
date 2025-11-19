@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{V-measure}
+
+\subsection*{Definición general}
+La \textbf{V-measure} evalúa la calidad de un clustering combinando dos propiedades fundamentales:  
+la \textit{homogeneidad} (pureza de los clusters) y la \textit{completitud} (agrupamiento total de cada clase).  
+Se define como la \textbf{media armónica} entre ambas métricas, análoga al \textbf{F1-score} en clasificación supervisada.
+
+\subsection*{Fórmula principal}
+\[
+V = \frac{2 \times \text{Homogeneity} \times \text{Completeness}}
+{\text{Homogeneity} + \text{Completeness}}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item \textbf{Homogeneity:} mide si cada cluster contiene solo miembros de una clase.
+    \item \textbf{Completeness:} mide si todos los miembros de una clase están asignados al mismo cluster.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Homogeneidad}
+\[
+\text{Homogeneity} = 1 - \frac{H(C|K)}{H(C)}
+\]
+\noindent
+\textit{Significado:} mide la pureza de los clusters.  
+Si cada cluster contiene elementos de una sola clase, $H(C|K) = 0$ y por tanto la homogeneidad es máxima.
+
+\paragraph{2. Completitud}
+\[
+\text{Completeness} = 1 - \frac{H(K|C)}{H(K)}
+\]
+\noindent
+\textit{Significado:} mide el grado en que cada clase está contenida dentro de un único cluster.
+
+\subsection*{Entropías utilizadas}
+\[
+H(C) = -\sum_{i=1}^{|C|} \frac{|C_i|}{N} \log \left( \frac{|C_i|}{N} \right)
+\]
+\[
+H(C|K) = -\sum_{k=1}^{|K|} \sum_{c=1}^{|C|} 
+\frac{|C_k \cap C_c|}{N} 
+\log \left( \frac{|C_k \cap C_c|}{|K_k|} \right)
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $C_i$: subconjunto de la clase $i$.
+    \item $K_k$: subconjunto del cluster $k$.
+    \item $|C_k \cap C_c|$: número de muestras compartidas entre clase $c$ y cluster $k$.
+    \item $N$: número total de muestras.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item $V = 1$: Clustering perfecto (homogeneidad y completitud iguales a 1).
+    \item $V = 0$: Clustering completamente aleatorio (sin estructura informativa).
+    \item $0 < V < 1$: Grado intermedio de calidad del clustering.
+\end{itemize}
+
+\subsection*{Propiedades teóricas}
+\begin{itemize}
+    \item \textbf{Media armónica:} penaliza fuertemente los desequilibrios; si una de las dos métricas es baja, $V$ también lo será.
+    \item \textbf{Basada en entropía:} se fundamenta en la teoría de la información, utilizando incertidumbre como medida de error.
+    \item \textbf{Normalización:} siempre acotada en $[0,1]$, lo que facilita la comparación entre distintos modelos o datasets.
+    \item \textbf{Simetría:} $V(C,K) = V(K,C)$, propiedad deseable para comparar particiones.
+\end{itemize}
+
+\subsection*{Conclusión}
+La \textbf{V-measure} resume la calidad global de un clustering al equilibrar la pureza (homogeneidad) y la cobertura (completitud).  
+Su estructura armónica garantiza una evaluación justa, penalizando tanto la mezcla de clases dentro de clusters como la fragmentación de las clases verdaderas entre múltiples clusters.
+
+\end{document}

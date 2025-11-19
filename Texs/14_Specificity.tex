@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Specificity (Especificidad)}
+
+\subsection*{Fórmula principal}
+\[
+\text{Specificity} = \frac{TN}{TN + FP}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $TN$: Verdaderos negativos — casos negativos correctamente clasificados.
+    \item $FP$: Falsos positivos — casos negativos incorrectamente clasificados como positivos.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+\begin{itemize}
+    \item \textbf{True Negatives (TN):} número de observaciones donde $y = 0$ y $\hat{y} = 0$.
+    \item \textbf{False Positives (FP):} errores de “sobre-detección”, donde $y = 0$ pero $\hat{y} = 1$.
+    \item \textbf{Denominador ($TN + FP$):} total de casos que realmente pertenecen a la clase negativa.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+La especificidad representa una probabilidad condicional:
+\[
+P(\hat{y} = 0 \;|\; y = 0)
+\]
+Esto se interpreta como: “la probabilidad de que el modelo clasifique correctamente un caso negativo, dado que realmente es negativo”.
+
+\subsection*{Rango e interpretación}
+\begin{itemize}
+    \item \textbf{Rango:} $[0, 1]$ (o $[0\%, 100\%]$)
+    \item \textbf{Valor óptimo:} $1.0$ (modelo perfecto, sin falsos positivos)
+    \item \textbf{Ejemplos:}
+    \begin{itemize}
+        \item $\text{Specificity} = 1.0$: nunca comete falsos positivos.
+        \item $\text{Specificity} = 0.5$: acierta el 50\% de los casos negativos.
+        \item $\text{Specificity} = 0.0$: clasifica todos los casos negativos como positivos.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Relación con otras métricas}
+La especificidad está estrechamente relacionada con la tasa de falsos positivos (FPR):
+\[
+\text{Specificity} = 1 - \text{FPR}
+\quad \text{donde} \quad
+\text{FPR} = \frac{FP}{FP + TN}
+\]
+
+\noindent
+Esto significa que a medida que aumentan los falsos positivos, la especificidad disminuye en la misma proporción.
+
+\subsection*{Resumen}
+La \textit{Specificity} mide la capacidad del modelo para identificar correctamente los casos negativos.  
+Es esencial en escenarios donde los falsos positivos son costosos o indeseables —por ejemplo, diagnósticos médicos, detección de fraudes o controles de calidad—.  
+Junto con el \textbf{Recall}, proporciona una evaluación equilibrada del rendimiento de un modelo en ambas clases.
+
+\end{document}

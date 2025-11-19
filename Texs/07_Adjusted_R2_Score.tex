@@ -1,0 +1,97 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Adjusted R² Score (Coeficiente de Determinación Ajustado)}
+
+\subsection*{Fórmula principal}
+\[
+R^2_{adj} = 1 - \frac{(1 - R^2)(n - 1)}{n - p - 1}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $R^2$: coeficiente de determinación tradicional
+    \item $n$: número total de observaciones
+    \item $p$: número de variables predictoras
+\end{itemize}
+
+\subsection*{Fórmula alternativa}
+\[
+R^2_{adj} = 1 - 
+\frac{SS_{res}/(n - p - 1)}{SS_{tot}/(n - 1)}
+\]
+\noindent
+donde:
+\begin{itemize}
+    \item $SS_{res} = \sum (y_i - \hat{y}_i)^2$: suma de cuadrados de los residuos
+    \item $SS_{tot} = \sum (y_i - \bar{y})^2$: suma total de cuadrados
+\end{itemize}
+
+\subsection*{Concepto y lógica}
+El \textbf{Adjusted R² Score} introduce una corrección al $R^2$ tradicional penalizando la adición de variables que no mejoran el modelo de forma significativa.  
+Esta penalización depende del número de observaciones $n$ y del número de predictores $p$.
+
+\subsection*{Factor de penalización}
+\[
+\text{Penalización} = \frac{n - 1}{n - p - 1}
+\]
+\noindent
+\begin{itemize}
+    \item Cuando $p$ es pequeño: penalización $\approx 1$ (mínima)
+    \item Cuando $p$ crece: penalización $\gg 1$ (mayor)
+    \item Caso extremo $p = n - 1$: penalización $\to \infty$
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item $(1 - R^2)$ mide la fracción de varianza no explicada.
+    \item El término $\dfrac{(n - 1)}{(n - p - 1)}$ penaliza la complejidad del modelo.
+    \item Restar el producto de ambos a 1 produce el $R^2$ ajustado, que recompensa mejoras reales y castiga sobreajustes.
+\end{itemize}
+
+\subsection*{Escenarios de comportamiento}
+\begin{itemize}
+    \item \textbf{Variable útil añadida:} $R^2$ aumenta notablemente, la penalización crece poco $\Rightarrow R^2_{adj}$ sube.
+    \item \textbf{Variable irrelevante:} $R^2$ apenas mejora, la penalización domina $\Rightarrow R^2_{adj}$ disminuye.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item $R^2_{adj} \leq R^2$ \quad (salvo en el caso trivial de una sola variable)
+    \item $\displaystyle \lim_{n \to \infty} R^2_{adj} = R^2$ \quad (la corrección desaparece con muestras grandes)
+    \item $\dfrac{\partial R^2_{adj}}{\partial p} < 0$ si la nueva variable no aporta información significativa
+\end{itemize}
+
+\subsection*{Comparación con R² tradicional}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{R² tradicional} & \textbf{R² ajustado} \\
+\hline
+$1 - \dfrac{SS_{res}}{SS_{tot}}$ & $1 - \dfrac{SS_{res}/(n-p-1)}{SS_{tot}/(n-1)}$ \\
+\hline
+Siempre aumenta con más variables & Puede disminuir si la variable es irrelevante \\
+\hline
+No considera grados de libertad & Ajusta por grados de libertad \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Resumen}
+El $R^2_{adj}$ ofrece una visión más realista del poder explicativo del modelo, al incorporar una penalización por complejidad.  
+A diferencia del $R^2$, puede disminuir cuando se añaden predictores sin valor informativo, lo que lo convierte en una métrica más robusta para evaluar modelos multivariados.
+
+\end{document}

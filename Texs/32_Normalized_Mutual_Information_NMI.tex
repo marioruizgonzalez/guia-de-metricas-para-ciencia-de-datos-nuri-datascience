@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Normalized Mutual Information (NMI)}
+
+\subsection*{Definición general}
+La \textbf{Normalized Mutual Information (NMI)} mide la similitud entre dos particiones de datos, generalmente entre la clasificación real y la generada por un algoritmo de clustering.  
+Se basa en el concepto de información mutua, normalizada por las entropías de ambas particiones para obtener un valor acotado entre 0 y 1.
+
+\subsection*{Fórmula principal}
+\[
+NMI(U, V) = \frac{2 \times I(U, V)}{H(U) + H(V)}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $U$: Partición verdadera (\textit{ground truth}).
+    \item $V$: Partición predicha por el algoritmo.
+    \item $I(U,V)$: Información mutua entre $U$ y $V$.
+    \item $H(U), H(V)$: Entropías de las particiones $U$ y $V$.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Información Mutua $I(U,V)$}
+\[
+I(U,V) = \sum_i \sum_j P(i,j) \log \left( \frac{P(i,j)}{P(i) \times P(j)} \right)
+\]
+\noindent
+\textit{Significado:} mide cuánta información comparten $U$ y $V$.  
+Si son completamente independientes, $I(U,V) = 0$.
+
+\paragraph{2. Entropía de una partición $H(U)$}
+\[
+H(U) = -\sum_i P(i) \log P(i)
+\]
+\noindent
+\textit{Significado:} mide el grado de incertidumbre o desorden en la partición.  
+Una entropía mayor implica clusters más balanceados y una distribución más uniforme.
+
+\paragraph{3. Cálculo en términos de frecuencias}
+\[
+P(i,j) = \frac{|U_i \cap V_j|}{N}, \quad
+P(i) = \frac{|U_i|}{N}, \quad
+P(j) = \frac{|V_j|}{N}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $|U_i \cap V_j|$: Número de elementos en la intersección del cluster $i$ de $U$ con el cluster $j$ de $V$.
+    \item $|U_i|$: Tamaño del cluster $i$ en $U$.
+    \item $N$: Número total de observaciones.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item Si $U = V$ (clustering perfecto), entonces $I(U,V) = H(U) = H(V)$, y por tanto $NMI = 1$.
+    \item Si $U$ y $V$ son independientes, $I(U,V) = 0$, y por tanto $NMI = 0$.
+    \item El factor de normalización $\frac{2}{H(U) + H(V)}$ garantiza que la métrica esté acotada en $[0,1]$.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas clave}
+\begin{itemize}
+    \item \textbf{Rango:} $0 \leq NMI(U,V) \leq 1$.
+    \item \textbf{Simetría:} $NMI(U,V) = NMI(V,U)$.
+    \item \textbf{Invarianza:} No se ve afectada por permutaciones de etiquetas.
+    \item \textbf{Monotonía:} A mayor correspondencia entre particiones, mayor valor de NMI.
+\end{itemize}
+
+\subsection*{Ventajas e interpretación práctica}
+\begin{itemize}
+    \item \textbf{Normalización robusta:} El resultado es comparable entre datasets con distinto número de clusters.
+    \item \textbf{Escalabilidad:} Basada en conteos y probabilidades, es eficiente computacionalmente.
+    \item \textbf{Interpretabilidad:} NMI = 1 indica correspondencia perfecta; NMI = 0 indica independencia total.
+    \item \textbf{Aplicabilidad:} Ideal para evaluar clustering cuando las etiquetas verdaderas son conocidas (por ejemplo, validación supervisada).
+\end{itemize}
+
+\subsection*{Conclusión}
+La \textbf{Normalized Mutual Information} integra teoría de la información y estadística para ofrecer una métrica simétrica, acotada e interpretable.  
+Su capacidad para comparar estructuras de clusters independientemente de su escala o número la convierte en una herramienta estándar para evaluar la consistencia entre particiones en problemas de clustering.
+
+\end{document}

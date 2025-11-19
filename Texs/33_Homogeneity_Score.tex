@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Homogeneity Score}
+
+\subsection*{Definición general}
+El \textbf{Homogeneity Score} mide qué tan “puros” son los clusters producidos por un algoritmo de agrupamiento.  
+Un clustering es perfectamente homogéneo si cada cluster contiene únicamente muestras de una sola clase verdadera.
+
+\subsection*{Fórmula principal}
+\[
+\text{Homogeneity} = 1 - \frac{H(C|K)}{H(C)}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $H(C|K)$: Entropía condicional de las clases dadas los clusters.
+    \item $H(C)$: Entropía de las clases verdaderas.
+\end{itemize}
+
+\subsection*{Entropías involucradas}
+\paragraph{1. Entropía de las clases $H(C)$}
+\[
+H(C) = -\sum_c \frac{n_c}{N} \log \left( \frac{n_c}{N} \right)
+\]
+\noindent
+Mide la incertidumbre total de la distribución de clases en el dataset.
+
+\paragraph{2. Entropía condicional $H(C|K)$}
+\[
+H(C|K) = -\sum_k \sum_c \frac{n_{ck}}{N} \log \left( \frac{n_{ck}}{n_k} \right)
+\]
+\noindent
+Mide la incertidumbre de las clases \textit{dentro} de cada cluster:
+\[
+H(C|K) = \sum_k \frac{n_k}{N} H(C_k)
+\]
+donde $H(C_k)$ es la entropía local de las clases en el cluster $k$.
+
+\subsection*{Definiciones de variables}
+\begin{itemize}
+    \item $n_{ck}$: Número de muestras de la clase $c$ en el cluster $k$.
+    \item $n_k$: Número total de muestras en el cluster $k$.
+    \item $n_c$: Número total de muestras de la clase $c$.
+    \item $N$: Número total de observaciones en el conjunto de datos.
+    \item $C$: Conjunto de clases verdaderas.
+    \item $K$: Conjunto de clusters predichos.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item \textbf{Homogeneity} = 1: Cada cluster contiene solo una clase (clustering perfecto).
+    \item \textbf{Homogeneity} = 0: Los clusters reproducen la misma mezcla de clases que el dataset completo.
+    \item $0 \leq \text{Homogeneity} \leq 1$: Valores intermedios reflejan distintos grados de pureza.
+\end{itemize}
+
+\subsection*{Fundamento teórico}
+\begin{itemize}
+    \item \textbf{Base en teoría de la información:} Utiliza entropía para cuantificar la pureza informativa de los clusters.
+    \item \textbf{Normalización:} Al dividir $H(C|K)$ entre $H(C)$, la métrica queda acotada entre 0 y 1.
+    \item \textbf{Penalización de impureza:} Clusters con mezcla de clases aumentan $H(C|K)$, reduciendo el score.
+    \item \textbf{Invarianza a etiquetas:} La métrica es independiente de la numeración o nombres de los clusters.
+\end{itemize}
+
+\subsection*{Ventajas e interpretación práctica}
+\begin{itemize}
+    \item Mide la \textit{pureza} de los clusters en relación con las clases verdaderas.
+    \item Es complementaria al \textbf{Completeness Score}, y su combinación forma la \textbf{V-measure}.
+    \item Ideal para analizar resultados de clustering supervisado o semisupervisado.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Homogeneity Score} cuantifica la pureza de un clustering desde una perspectiva informacional.  
+Basado en entropías, ofrece una medida normalizada, interpretable e invariante al etiquetado, convirtiéndose en una métrica esencial para evaluar la consistencia de agrupamientos con clases conocidas.
+
+\end{document}

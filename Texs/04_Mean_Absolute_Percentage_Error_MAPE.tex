@@ -1,0 +1,54 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle  % Desactivado para mantener formato limpio
+
+\section*{Mean Absolute Percentage Error (MAPE)}
+
+\subsection*{Fórmula del MAPE}
+\[
+MAPE = \frac{100}{n} \sum_{i=1}^{n} \left| \frac{y_i - \hat{y}_i}{y_i} \right|
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: número total de observaciones
+    \item $y_i$: valor real (ground truth)
+    \item $\hat{y}_i$: valor predicho por el modelo
+    \item $\dfrac{y_i - \hat{y}_i}{y_i}$: error relativo (proporción respecto al valor real)
+\end{itemize}
+
+\subsection*{Interpretación}
+El \textbf{Mean Absolute Percentage Error (MAPE)} mide el error medio en porcentaje entre los valores reales y los predichos.  
+Expresa, en promedio, cuánto se desvía la predicción del valor verdadero, normalizando cada error por el valor real.
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $[0, +\infty)$, donde 0 indica predicciones perfectas.
+    \item \textbf{Unidades:} Porcentaje (\%).
+    \item \textbf{Simetría:} No simétrica, ya que los errores relativos dependen del denominador $y_i$.
+    \item \textbf{Sensibilidad:} Mayor impacto de errores en valores pequeños que en grandes.
+\end{itemize}
+
+\subsection*{Comportamiento y limitaciones}
+\begin{itemize}
+    \item Cuando $y_i \to 0$, el MAPE $\to \infty$, lo que lo hace inadecuado para series con valores cercanos a cero.
+    \item Penaliza de forma proporcional: un error del 10\% tiene el mismo peso en cualquier punto de la escala.
+\end{itemize}
+
+\subsection*{Resumen}
+El MAPE es una métrica intuitiva, expresada en porcentaje, que facilita la interpretación del error.  
+Sin embargo, su sensibilidad a valores pequeños y su falta de simetría limitan su uso en contextos donde los datos pueden tomar valores cercanos a cero.
+
+\end{document}

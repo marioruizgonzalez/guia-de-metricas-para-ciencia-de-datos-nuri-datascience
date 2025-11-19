@@ -1,0 +1,97 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Average Precision Score (AP)}
+
+\subsection*{Fórmula principal}
+El \textbf{Average Precision Score (AP)} se define como la suma ponderada de la precisión por los incrementos en el recall:
+
+\[
+AP = \sum_{n=1}^{N} [P(n) \times \Delta R(n)]
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $P(n)$: Precisión en el umbral $n$.
+    \item $\Delta R(n)$: Cambio en el recall entre los umbrales $n-1$ y $n$.
+    \item $N$: Número total de umbrales evaluados.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Precisión (P):}
+\[
+P = \frac{TP}{TP + FP}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos — predicciones correctas de la clase positiva.
+    \item $FP$: Falsos positivos — predicciones incorrectas de la clase positiva.
+\end{itemize}
+
+\paragraph{2. Recall (R):}
+\[
+R = \frac{TP}{TP + FN}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $FN$: Falsos negativos — casos positivos no detectados.
+\end{itemize}
+
+\paragraph{3. Implementación práctica (Sklearn):}
+En la práctica, la librería \texttt{scikit-learn} utiliza la aproximación trapezoidal:
+\[
+AP = \sum_{k=1}^{n} [R(k) - R(k-1)] \times P(k)
+\]
+\noindent
+Esta aproximación estima el área bajo la curva \textit{Precision–Recall} con precisión numérica eficiente.
+
+\subsection*{Significado matemático}
+\begin{itemize}
+    \item \textbf{Área bajo la curva:}  
+    $AP$ representa el área bajo la curva \textit{Precision–Recall}.
+    \item \textbf{Ponderación por recall:}  
+    Cada valor de precisión se multiplica por el incremento correspondiente de recall, ponderando contribuciones de forma acumulativa.
+    \item \textbf{Rango:}  
+    $AP \in [0,1]$
+    \begin{itemize}
+        \item $AP = 1.0$: Modelo perfecto.
+        \item $AP = 0.0$: Peor caso posible.
+        \item $AP \approx$ proporción de clase positiva: Modelo aleatorio.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Fundamento teórico}
+El \textbf{Average Precision Score} captura la relación entre precisión y recall de forma integral, con propiedades matemáticas sólidas:
+
+\begin{itemize}
+    \item \textbf{Captura trade-offs:}  
+    Resume el equilibrio entre precisión y recall en un solo valor continuo.
+    \item \textbf{Invariante al desbalance:}  
+    No depende de la proporción entre clases positivas y negativas.
+    \item \textbf{Sensible al ranking:}  
+    Recompensa modelos que asignan puntuaciones más altas a ejemplos positivos.
+    \item \textbf{Base estadística sólida:}  
+    Fundamentada en integrales definidas sobre el espacio de probabilidades condicionales.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Average Precision Score} proporciona una evaluación robusta y estable en contextos donde la precisión de ranking es más relevante que un umbral fijo.  
+Matemáticamente, es equivalente al cálculo del área bajo la curva \textit{Precision–Recall}, siendo especialmente útil en datasets desbalanceados o con alta asimetría de clases.
+
+\end{document}

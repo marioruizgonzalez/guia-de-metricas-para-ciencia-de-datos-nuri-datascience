@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Cohen's Kappa Score}
+
+\subsection*{Fórmula principal}
+\[
+\kappa = \frac{P_o - P_e}{1 - P_e}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $P_o$: Proporción de acuerdo observado (equivalente al \textit{accuracy}).
+    \item $P_e$: Proporción de acuerdo esperado por azar.
+    \item $1 - P_e$: Máximo acuerdo posible más allá del azar.
+\end{itemize}
+
+\subsection*{Cálculo paso a paso}
+
+\textbf{1. Acuerdo observado ($P_o$):}
+\[
+P_o = \frac{TP + TN}{TP + TN + FP + FN}
+\]
+Representa la proporción total de predicciones correctas (accuracy tradicional).
+
+\medskip
+
+\textbf{2. Acuerdo esperado por azar ($P_e$):}
+Para clasificación binaria:
+\[
+P_e = P(\text{Clase}_1^{real}) \times P(\text{Clase}_1^{pred}) + P(\text{Clase}_0^{real}) \times P(\text{Clase}_0^{pred})
+\]
+
+\noindent
+Donde:
+\[
+\begin{aligned}
+P(\text{Clase}_1^{real}) &= \frac{TP + FN}{N}, &
+P(\text{Clase}_1^{pred}) &= \frac{TP + FP}{N}, \\
+P(\text{Clase}_0^{real}) &= \frac{TN + FP}{N}, &
+P(\text{Clase}_0^{pred}) &= \frac{TN + FN}{N}
+\end{aligned}
+\]
+
+\subsection*{Interpretación matemática}
+\[
+\begin{aligned}
+\kappa &= 1 &\Rightarrow& \text{Acuerdo perfecto.} \\
+\kappa &= 0 &\Rightarrow& \text{Acuerdo igual al esperado por azar.} \\
+\kappa &< 0 &\Rightarrow& \text{Acuerdo peor que el azar (raro en práctica).}
+\end{aligned}
+\]
+
+\subsection*{Fundamento y propiedades}
+\begin{itemize}
+    \item \textbf{Normalización:} El denominador $(1 - P_e)$ ajusta la diferencia entre el acuerdo observado y el esperado, escalando $\kappa$ en $[-1, 1]$.
+    \item \textbf{Invarianza a la prevalencia:} No se ve inflado artificialmente en datasets desbalanceados.
+    \item \textbf{Interpretabilidad universal:} Los valores mantienen un significado consistente entre dominios distintos.
+    \item \textbf{Robustez:} Penaliza modelos que predicen con precisión aparente debido al desbalance, sin capturar patrones reales.
+\end{itemize}
+
+\subsection*{Ejemplo interpretativo}
+Si un modelo obtiene $P_o = 0.90$ y $P_e = 0.60$, entonces:
+\[
+\kappa = \frac{0.90 - 0.60}{1 - 0.60} = 0.75
+\]
+\noindent
+Interpretación: el modelo logra un acuerdo 75\% mejor que el esperado únicamente por azar.
+
+\subsection*{Conclusión}
+El \textbf{Cohen’s Kappa Score} ofrece una visión más justa del rendimiento de un modelo que la \textit{accuracy} simple, ya que descuenta el acuerdo atribuible al azar.  
+Su fundamento probabilístico lo convierte en una métrica esencial en tareas de clasificación desbalanceada o en escenarios donde el acuerdo real entre predicciones y observaciones debe ser rigurosamente cuantificado.
+
+\end{document}

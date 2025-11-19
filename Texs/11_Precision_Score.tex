@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Precision Score}
+
+\subsection*{Fórmula principal}
+\[
+\text{Precision} = \frac{TP}{TP + FP}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos (casos correctamente identificados como positivos)
+    \item $FP$: Falsos positivos (casos negativos clasificados erróneamente como positivos)
+    \item $TP + FP$: Total de predicciones positivas realizadas por el modelo
+\end{itemize}
+
+\subsection*{Matriz de confusión}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+ & \textbf{Predicción Positiva} & \textbf{Predicción Negativa} \\
+\hline
+\textbf{Real Positivo} & TP (True Positive) & FN (False Negative) \\
+\hline
+\textbf{Real Negativo} & FP (False Positive) & TN (True Negative) \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Significado matemático}
+La precisión mide la proporción de predicciones positivas que fueron realmente correctas.  
+Formalmente, cuantifica la \textbf{pureza de las predicciones positivas}:
+
+\[
+\text{Precision} = P(y = 1 \,|\, \hat{y} = 1)
+\]
+
+\noindent
+Esto equivale a la probabilidad de que, dado que el modelo predijo “positivo”, el caso efectivamente lo sea.
+
+\subsection*{Interpretación}
+\begin{itemize}
+    \item $\text{Precision} = 1.0$: todas las predicciones positivas son correctas.
+    \item $\text{Precision} = 0.5$: la mitad de las predicciones positivas son correctas.
+    \item $\text{Precision} = 0.0$: ninguna predicción positiva fue correcta.
+\end{itemize}
+
+\noindent
+La precisión se enfoca en la \textbf{calidad de las predicciones positivas}, sin considerar los casos negativos.
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango definido:} $[0,1]$, donde valores cercanos a 1 indican alta fiabilidad en las predicciones positivas.
+    \item \textbf{Sensibilidad a falsos positivos:} pequeñas variaciones en $FP$ pueden reducir drásticamente la precisión.
+    \item \textbf{Invarianza al desbalance:} a diferencia de la exactitud (accuracy), no se ve afectada por clases mayoritarias.
+\end{itemize}
+
+\subsection*{Relación con otras métricas}
+La precisión se complementa con el \textbf{Recall} (Sensibilidad) para ofrecer una visión completa del rendimiento del modelo.  
+La relación entre ambas se expresa mediante el \textbf{F1-Score}:
+\[
+F_1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+\subsection*{Resumen}
+El \textit{Precision Score} cuantifica la exactitud de las predicciones positivas del modelo.  
+Es una métrica esencial en contextos donde los falsos positivos son costosos o críticos (por ejemplo, detección de fraudes, diagnóstico médico o filtrado de spam).
+
+\end{document}

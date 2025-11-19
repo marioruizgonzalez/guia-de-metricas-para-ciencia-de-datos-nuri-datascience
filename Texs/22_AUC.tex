@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{AUC (Área Bajo la Curva ROC)}
+
+\subsection*{Definición general}
+La \textbf{AUC (Area Under the ROC Curve)} mide la capacidad de un modelo de clasificación para distinguir entre clases positivas y negativas a través de todos los posibles umbrales de decisión.
+
+\subsection*{Construcción de la Curva ROC}
+La \textbf{Curva ROC} se grafica a partir de dos tasas fundamentales:
+
+\[
+\text{Eje Y: } TPR = \frac{TP}{TP + FN} \quad \text{(Sensibilidad / Recall)}
+\]
+\[
+\text{Eje X: } FPR = \frac{FP}{FP + TN} = 1 - \text{Especificidad}
+\]
+
+\noindent
+Para cada umbral $t$ de probabilidad:
+\[
+\hat{y} =
+\begin{cases}
+1, & \text{si } P(y=1|x) \geq t \\
+0, & \text{en caso contrario}
+\end{cases}
+\]
+
+\subsection*{Formulación matemática del AUC}
+
+\paragraph{1. Definición integral:}
+\[
+AUC = \int_{0}^{1} TPR(FPR^{-1}(x)) \, dx
+\]
+
+\paragraph{2. Interpretación probabilística:}
+\[
+AUC = P(\text{score}(x_+) > \text{score}(x_-))
+\]
+donde $x_+$ es un ejemplo positivo y $x_-$ un ejemplo negativo.  
+\textbf{Interpretación:} El AUC representa la probabilidad de que un ejemplo positivo reciba un puntaje mayor que un ejemplo negativo elegido al azar.
+
+\paragraph{3. Cálculo discreto (Fórmula trapezoidal):}
+\[
+AUC = \sum_{i=1}^{n-1} (FPR_{i+1} - FPR_i) \times \frac{(TPR_{i+1} + TPR_i)}{2}
+\]
+Esta aproximación numérica se usa comúnmente para calcular el área bajo la curva en implementaciones computacionales.
+
+\subsection*{Componentes explicados}
+\begin{itemize}
+    \item \textbf{TPR (Recall / Sensibilidad):}  
+    Proporción de positivos reales correctamente identificados por el modelo.
+    \item \textbf{FPR (False Positive Rate):}  
+    Proporción de negativos reales clasificados erróneamente como positivos.
+    \item \textbf{Umbral ($t$):}  
+    Punto de corte sobre la probabilidad estimada que define la frontera entre clases.
+\end{itemize}
+
+\subsection*{Fundamento matemático}
+\begin{itemize}
+    \item \textbf{Invariancia al umbral:}  
+    Evalúa el rendimiento del modelo sobre todos los posibles valores de $t$ simultáneamente.
+    \item \textbf{Interpretación geométrica:}  
+    El área bajo la curva ROC refleja la capacidad del modelo para ordenar correctamente pares positivo-negativo.
+    \item \textbf{Conexión estadística:}  
+    El AUC es equivalente al estadístico de \textit{Mann–Whitney U}:
+    \[
+    AUC = \frac{U_1}{n_1 n_2}
+    \]
+    donde $n_1$ y $n_2$ son los tamaños de las clases positiva y negativa respectivamente.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{AUC} es una métrica robusta y ampliamente interpretada que resume en un solo valor la habilidad discriminativa del modelo, independientemente del umbral.  
+Su interpretación probabilística y su relación con pruebas estadísticas no paramétricas la convierten en una medida esencial para la evaluación de modelos de clasificación binaria.
+
+\end{document}

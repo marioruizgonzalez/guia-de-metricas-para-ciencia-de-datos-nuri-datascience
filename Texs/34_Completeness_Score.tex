@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Completeness Score}
+
+\subsection*{Definición general}
+El \textbf{Completeness Score} evalúa qué tan bien un algoritmo de clustering agrupa todos los miembros de una misma clase en un solo cluster.  
+Se basa en la teoría de la información, utilizando la entropía condicional y la entropía de las clases verdaderas para medir la “completitud” del agrupamiento.
+
+\subsection*{Fórmula principal}
+\[
+\text{Completeness} = 1 - \frac{H(C|K)}{H(C)}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $H(C|K)$: Entropía condicional de las clases dadas los clusters.
+    \item $H(C)$: Entropía de las clases verdaderas.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Entropía de las clases $H(C)$}
+\[
+H(C) = -\sum_{i=1}^{|C|} \frac{n_i}{N} \log_2 \left( \frac{n_i}{N} \right)
+\]
+\noindent
+\textit{Significado:} mide la incertidumbre total en la distribución de clases.  
+Es máxima cuando las clases están perfectamente balanceadas y mínima cuando una sola clase domina.
+
+\paragraph{2. Entropía condicional $H(C|K)$}
+\[
+H(C|K) = -\sum_{k=1}^{|K|} \sum_{c=1}^{|C|} \frac{n_{c,k}}{N} 
+\log_2 \left( \frac{n_{c,k}}{n_k} \right)
+\]
+\noindent
+\textit{Significado:} mide la incertidumbre que queda sobre las clases después de conocer los clusters.  
+Es baja cuando cada clase está bien contenida en un solo cluster.
+
+\subsection*{Definiciones de variables}
+\begin{itemize}
+    \item $n_i$: Número de puntos pertenecientes a la clase $i$.
+    \item $n_{c,k}$: Número de puntos de la clase $c$ dentro del cluster $k$.
+    \item $n_k$: Número total de puntos en el cluster $k$.
+    \item $N$: Número total de muestras.
+    \item $|C|$: Número total de clases verdaderas.
+    \item $|K|$: Número total de clusters predichos.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item $\frac{H(C|K)}{H(C)}$: Proporción de incertidumbre que \textit{permanece} después del clustering.
+    \item $1 - \frac{H(C|K)}{H(C)}$: Proporción de incertidumbre que el clustering ha \textit{resuelto}.
+\end{itemize}
+
+\subsection*{Rango e interpretación}
+\begin{itemize}
+    \item \textbf{Completeness} = 1: Cada clase está completamente contenida en un único cluster (clustering perfecto).
+    \item \textbf{Completeness} = 0: Los clusters no aportan información sobre las clases (peor caso).
+    \item $0 < \text{Completeness} < 1$: Nivel parcial de completitud.
+\end{itemize}
+
+\subsection*{Fundamento teórico}
+\begin{itemize}
+    \item \textbf{Base informacional:} Utiliza entropía para cuantificar la cantidad de información retenida por el clustering.
+    \item \textbf{Normalización:} El cociente $H(C|K)/H(C)$ asegura que la métrica esté acotada en $[0,1]$.
+    \item \textbf{Sensibilidad estructural:} Mejores agrupamientos (más coherentes con las clases) reducen $H(C|K)$ y aumentan el score.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $0 \leq \text{Completeness} \leq 1$
+    \item \textbf{No simétrica:} El resultado depende de cuál partición se considera como referencia.
+    \item \textbf{Monotonía:} Aumenta con la mejora en la cohesión de las clases dentro de los clusters.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Completeness Score} mide la capacidad de un clustering para agrupar correctamente todos los miembros de una misma clase.  
+Complementa al \textbf{Homogeneity Score}, y ambos se combinan en la \textbf{V-measure}, proporcionando una visión balanceada entre pureza y completitud en la evaluación de algoritmos de clustering.
+
+\end{document}

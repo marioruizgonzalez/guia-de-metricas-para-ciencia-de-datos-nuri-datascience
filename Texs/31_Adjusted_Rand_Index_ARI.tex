@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Adjusted Rand Index (ARI)}
+
+\subsection*{Definición general}
+El \textbf{Adjusted Rand Index (ARI)} mide la similitud entre dos particiones de un conjunto de datos (por ejemplo, entre etiquetas verdaderas y clusters obtenidos).  
+A diferencia del Rand Index clásico, el ARI \textit{corrige por el azar}, proporcionando una evaluación más justa de la concordancia entre agrupamientos.
+
+\subsection*{Fórmula general}
+\[
+ARI = \frac{RI - \mathbb{E}[RI]}{\max(RI) - \mathbb{E}[RI]}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $RI$: Rand Index observado.
+    \item $\mathbb{E}[RI]$: Valor esperado del Rand Index bajo hipótesis nula (agrupamiento aleatorio).
+    \item $\max(RI)$: Valor máximo posible del Rand Index.
+\end{itemize}
+
+\subsection*{Construcción de la tabla de contingencia}
+Sea una tabla de contingencia que cruza los clusters reales ($R_i$) con los predichos ($C_j$):
+
+\[
+\begin{array}{c|cccc|c}
+ & C_1 & C_2 & \cdots & C_j & \text{Totales} \\
+\hline
+R_1 & n_{11} & n_{12} & \cdots & n_{1j} & a_1 \\
+R_2 & n_{21} & n_{22} & \cdots & n_{2j} & a_2 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+R_i & n_{i1} & n_{i2} & \cdots & n_{ij} & a_i \\
+\hline
+\text{Totales} & b_1 & b_2 & \cdots & b_j & n \\
+\end{array}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n_{ij}$: Número de puntos en la intersección entre el cluster real $R_i$ y el predicho $C_j$.
+    \item $a_i = \sum_j n_{ij}$: Total de puntos en el cluster real $R_i$.
+    \item $b_j = \sum_i n_{ij}$: Total de puntos en el cluster predicho $C_j$.
+\end{itemize}
+
+\subsection*{Cálculo del Rand Index}
+El \textbf{Rand Index (RI)} mide la proporción de pares de puntos que son clasificados consistentemente en ambas particiones:
+\[
+RI = \frac{a + b}{\binom{n}{2}}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $a$: Número de pares en el mismo cluster en ambas particiones.
+    \item $b$: Número de pares en clusters distintos en ambas particiones.
+    \item $\binom{n}{2} = \frac{n(n-1)}{2}$: Total de pares posibles.
+\end{itemize}
+
+\subsection*{Fórmula expandida del ARI}
+\[
+ARI = 
+\frac{
+    \sum_{i,j} \binom{n_{ij}}{2}
+    - \frac{
+        \sum_i \binom{a_i}{2} \sum_j \binom{b_j}{2}
+      }{\binom{n}{2}}
+}{
+    \frac{1}{2}
+    \left[
+        \sum_i \binom{a_i}{2} + \sum_j \binom{b_j}{2}
+    \right]
+    - \frac{
+        \sum_i \binom{a_i}{2} \sum_j \binom{b_j}{2}
+      }{\binom{n}{2}}
+}
+\]
+
+\noindent
+\textbf{Significado de los términos:}
+\begin{itemize}
+    \item $\binom{n_{ij}}{2}$: Pares de puntos que coinciden en $R_i$ y $C_j$.
+    \item $\binom{a_i}{2}$: Pares en el cluster $R_i$ del conjunto real.
+    \item $\binom{b_j}{2}$: Pares en el cluster $C_j$ del conjunto predicho.
+\end{itemize}
+
+\noindent
+\textbf{Numerador:} Acuerdos observados menos acuerdos esperados por azar.  
+\textbf{Denominador:} Máximos acuerdos posibles menos acuerdos esperados por azar.
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $ARI \in [-1, 1]$
+    \item \textbf{Interpretación:}
+    \begin{itemize}
+        \item $ARI = 1$: Concordancia perfecta.
+        \item $ARI = 0$: Concordancia equivalente al azar.
+        \item $ARI < 0$: Peor que el azar (raro en la práctica).
+    \end{itemize}
+    \item \textbf{Simetría:} $ARI(X, Y) = ARI(Y, X)$.
+    \item \textbf{Corrección por azar:} Elimina el sesgo hacia valores altos cuando hay muchos clusters pequeños.
+\end{itemize}
+
+\subsection*{Ventajas e interpretación práctica}
+\begin{itemize}
+    \item Robusto ante el número de clusters.
+    \item Adecuado para comparar resultados de diferentes algoritmos de clustering con etiquetas conocidas.
+    \item Más informativo que el Rand Index simple.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Adjusted Rand Index} proporciona una medida estadísticamente sólida de similitud entre particiones.  
+Su ajuste por azar y su rango interpretativo lo hacen una herramienta esencial para evaluar modelos de clustering supervisado y semisupervisado.
+
+\end{document}

@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+\section*{Mean Absolute Error (MAE)}
+
+\subsection*{Fórmula del MAE}
+\[
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: número total de observaciones
+    \item $y_i$: valor real
+    \item $\hat{y}_i$: valor predicho por el modelo
+\end{itemize}
+
+\subsection*{Interpretación}
+El \textbf{Mean Absolute Error (MAE)} mide el error promedio absoluto entre las predicciones y los valores reales.
+Cada diferencia se toma en valor absoluto para evitar que los errores positivos y negativos se compensen entre sí.
+
+\subsection*{Propiedades clave}
+\begin{itemize}
+    \item Siempre es \textbf{no negativa}: $MAE \ge 0$. Un valor de 0 indica predicciones perfectas.
+    \item Usa la \textbf{distancia L1 (Manhattan)} como referencia geométrica.
+    \item Es \textbf{robusta ante valores atípicos}, pues no eleva los errores al cuadrado.
+    \item Mantiene las mismas unidades que la variable objetivo, facilitando su interpretación.
+\end{itemize}
+
+\subsection*{Resumen}
+La MAE indica, en promedio, cuánto se equivoca un modelo por observación. 
+Es ideal cuando se busca una medida de error intuitiva, estable y fácilmente comparable entre modelos.
+
+\end{document}

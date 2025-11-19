@@ -1,0 +1,105 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Brier Score}
+
+\subsection*{Definición general}
+El \textbf{Brier Score (BS)} mide la calidad de las predicciones probabilísticas, evaluando cuán cercanas están las probabilidades predichas a los resultados reales.  
+A diferencia del \textit{Log Loss}, el Brier Score es más interpretable y está acotado en un rango finito.
+
+\subsection*{Fórmula para clasificación binaria}
+\[
+BS = \frac{1}{N} \sum_{i=1}^{N} (p_i - o_i)^2
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $N$: Número total de observaciones.
+    \item $p_i$: Probabilidad predicha para la observación $i$ (entre $0$ y $1$).
+    \item $o_i$: Resultado real para la observación $i$ ($0$ o $1$).
+\end{itemize}
+
+\subsection*{Interpretación de los componentes}
+El término cuadrático $(p_i - o_i)^2$ penaliza la distancia entre la predicción y el valor real:
+\begin{itemize}
+    \item Penalización leve si $p_i$ está cerca de $o_i$.
+    \item Penalización severa cuando la predicción es confiada pero incorrecta.
+\end{itemize}
+
+\noindent
+\textbf{Ejemplos de penalización:}
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Predicción ($p$)} & \textbf{Real ($o$)} & \textbf{Error cuadrático $(p-o)^2$} \\
+\hline
+0.9 & 1 & 0.01 — Penalización baja (acierto confiado) \\
+0.7 & 0 & 0.49 — Penalización media (error moderado) \\
+0.1 & 1 & 0.81 — Penalización alta (error confiado) \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Rango e interpretación}
+\begin{itemize}
+    \item Rango: $[0, 1]$
+    \item Valor óptimo: $0$ — predicciones perfectas.
+    \item Clasificador aleatorio (balanceado): $\approx 0.25$ — siempre predice $p = 0.5$.
+    \item Peor caso: $1$ — predice 1 cuando la clase real es 0, o viceversa.
+\end{itemize}
+
+\subsection*{Descomposición del Brier Score}
+El Brier Score puede descomponerse en tres términos que aportan una comprensión más profunda del rendimiento del modelo:
+
+\[
+BS = \text{Reliability} - \text{Resolution} + \text{Uncertainty}
+\]
+
+\begin{itemize}
+    \item \textbf{Reliability:} Evalúa qué tan bien calibradas están las probabilidades predichas.  
+    Un modelo con alta confiabilidad produce probabilidades que reflejan correctamente la frecuencia observada.
+    \item \textbf{Resolution:} Mide la capacidad del modelo para distinguir entre casos positivos y negativos.  
+    Modelos con alta resolución asignan probabilidades muy distintas a casos opuestos.
+    \item \textbf{Uncertainty:} Representa la variabilidad inherente de los datos; depende solo de la distribución de clases reales.
+\end{itemize}
+
+\subsection*{Extensión a clasificación multiclase}
+Para problemas con $K$ clases, el Brier Score se generaliza como:
+\[
+BS = \frac{1}{N} \sum_{i=1}^{N} \sum_{k=1}^{K} (p_{ik} - o_{ik})^2
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $p_{ik}$: Probabilidad predicha de que la observación $i$ pertenezca a la clase $k$.
+    \item $o_{ik}$: Indicador binario ($1$ si la observación $i$ pertenece a la clase $k$, $0$ en caso contrario).
+\end{itemize}
+
+\subsection*{Comparación con otras métricas probabilísticas}
+\begin{itemize}
+    \item \textbf{Vs. Log Loss:}  
+    Log Loss penaliza exponencialmente los errores muy confiados; Brier Score aplica una penalización cuadrática más moderada.
+    \item \textbf{Interpretabilidad:}  
+    Su rango fijo $[0,1]$ facilita la comparación entre modelos o datasets.
+    \item \textbf{Calibración:}  
+    Brier Score es especialmente útil para evaluar la calibración de las probabilidades, no solo su ranking.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Brier Score} mide la exactitud promedio de las probabilidades predichas y refleja tanto la precisión como la calibración del modelo.  
+Matemáticamente, puede interpretarse como la \textit{mean squared error} aplicada a probabilidades, ofreciendo una medida directa, estable y acotada del rendimiento probabilístico.
+
+\end{document}

@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Matthews Correlation Coefficient (MCC)}
+
+\subsection*{Fórmula principal}
+\[
+\text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}
+\]
+
+\subsection*{Componentes de la fórmula}
+\begin{itemize}
+    \item $TP$: Verdaderos positivos — casos correctamente clasificados como positivos.
+    \item $TN$: Verdaderos negativos — casos correctamente clasificados como negativos.
+    \item $FP$: Falsos positivos — negativos clasificados como positivos.
+    \item $FN$: Falsos negativos — positivos clasificados como negativos.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\textbf{Numerador:}
+\[
+TP \times TN - FP \times FN
+\]
+Representa la diferencia entre las predicciones correctas $(TP \times TN)$ y los errores cruzados $(FP \times FN)$.
+\begin{itemize}
+    \item Si $FP = FN = 0$, entonces el numerador = $TP \times TN$ (predicción perfecta).
+    \item Si $TP = TN = 0$, entonces el numerador = $-FP \times FN$ (predicción completamente incorrecta).
+\end{itemize}
+
+\textbf{Denominador:}
+\[
+\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}
+\]
+Corresponde al producto geométrico de los marginales de la matriz de confusión.  
+Actúa como factor de normalización que asegura que el MCC esté limitado en el rango:
+\[
+-1 \leq \text{MCC} \leq +1
+\]
+
+\subsection*{Propiedades matemáticas y fundamentos}
+\begin{itemize}
+    \item \textbf{Simetría:} Trata ambas clases por igual, sin sesgo hacia la clase mayoritaria.
+    \item \textbf{Normalización:} Ajusta el valor en función de la distribución de clases, permitiendo comparaciones entre datasets.
+    \item \textbf{Fundamento estadístico:} Equivale al coeficiente de correlación de Pearson entre las variables binarias \textit{real} y \textit{predicha}.
+    \item \textbf{Robustez:} Su interpretación se mantiene consistente incluso en contextos con fuerte desbalance de clases.
+\end{itemize}
+
+\subsection*{Casos especiales}
+\begin{itemize}
+    \item Si alguno de los marginales $(TP+FP)$, $(TP+FN)$, $(TN+FP)$ o $(TN+FN)$ es cero, entonces $\text{MCC} = 0$.
+    \item $\text{MCC} = +1$ cuando $FP = FN = 0$ (predicción perfecta).
+    \item $\text{MCC} = -1$ cuando $TP = TN = 0$ (predicción perfectamente incorrecta).
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Matthews Correlation Coefficient} es una métrica estadísticamente sólida para evaluar modelos de clasificación binaria.  
+A diferencia del \textit{Accuracy}, incorpora toda la información de la matriz de confusión y proporciona una visión equilibrada del rendimiento, incluso en datasets desbalanceados.  
+Por ello, se considera una de las métricas más completas para evaluar el poder discriminante de un modelo.
+
+\end{document}

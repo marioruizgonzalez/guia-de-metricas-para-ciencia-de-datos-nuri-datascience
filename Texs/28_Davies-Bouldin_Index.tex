@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Davies–Bouldin Index (DBI)}
+
+\subsection*{Definición general}
+El \textbf{Davies–Bouldin Index (DBI)} evalúa la calidad de un agrupamiento midiendo la relación entre la \textit{dispersión interna} de los clusters y su \textit{separación mutua}.  
+Un valor bajo de DBI indica clusters compactos y bien separados, lo que refleja un agrupamiento de alta calidad.
+
+\subsection*{Fórmula general}
+\[
+DBI = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} R(i, j)
+\]
+\noindent
+Donde $k$ es el número total de clusters y $R(i,j)$ mide la \textit{similaridad} entre los clusters $i$ y $j$:
+
+\[
+R(i,j) = \frac{S(i) + S(j)}{M(i,j)}
+\]
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Dispersión intra-cluster (cohesión)}
+\[
+S(i) = \frac{1}{|C_i|} \sum_{x \in C_i} \| x - \mu_i \|_p
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $C_i$: Conjunto de puntos en el cluster $i$.
+    \item $|C_i|$: Número de puntos en el cluster $i$.
+    \item $\mu_i$: Centroide del cluster $i$.
+    \item $\| \cdot \|_p$: Norma $L_p$ (usualmente $p=2$, norma euclidiana).
+\end{itemize}
+
+\noindent
+\textit{Interpretación:} $S(i)$ mide qué tan "apretados" están los puntos alrededor de su centroide.  
+Valores pequeños indican alta cohesión.
+
+\paragraph{2. Distancia inter-cluster (separación)}
+\[
+M(i,j) = \| \mu_i - \mu_j \|_p
+\]
+\noindent
+\textit{Interpretación:} Mide la distancia entre los centroides de los clusters $i$ y $j$.  
+Valores grandes implican clusters bien separados.
+
+\paragraph{3. Razón de similaridad entre clusters}
+\[
+R(i,j) = \frac{S(i) + S(j)}{M(i,j)}
+\]
+\noindent
+\textit{Interpretación:} Relación entre la suma de dispersión interna de dos clusters y la distancia entre ellos.  
+Un valor bajo indica buena separación y compactación.
+
+\paragraph{4. Cálculo final del DBI}
+Para cada cluster $i$, se identifica el cluster $j$ que maximiza $R(i,j)$ (el más similar), y luego se promedia este valor sobre todos los clusters:
+\[
+DBI = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} R(i,j)
+\]
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item \textbf{Caso ideal ($DBI \to 0$):}  
+    Clusters perfectamente compactos y bien separados.
+    \item \textbf{Valores moderados ($1.0 \le DBI \le 2.0$):}  
+    Clusters con cierto solapamiento pero estructura visible.
+    \item \textbf{Valores altos ($DBI > 2.0$):}  
+    Clusters difusos o mal definidos.
+\end{itemize}
+
+\subsection*{Fundamento teórico}
+El DBI combina dos objetivos matemáticos opuestos:
+\begin{enumerate}
+    \item Minimizar la \textbf{dispersión interna} $S(i)$.
+    \item Maximizar la \textbf{separación entre clusters} $M(i,j)$.
+\end{enumerate}
+De esta forma, un buen modelo de clustering tendrá valores pequeños de $R(i,j)$ para todos los pares $(i,j)$, reduciendo el promedio global del índice.
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $DBI \ge 0$ (cuanto menor, mejor).
+    \item \textbf{Invarianza a escala:} Escalar o normalizar los datos no altera el valor de $DBI$.
+    \item \textbf{Sensibilidad:}  
+    - Funciona mejor con clusters convexos y de tamaño similar.  
+    - Sensible a outliers que distorsionan los centroides.
+\end{itemize}
+
+\subsection*{Interpretación práctica}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+\textbf{Valor DBI} & \textbf{Interpretación} \\
+\hline
+$< 1.0$ & Clusters compactos y bien separados \\
+$1.0$–$2.0$ & Clusters con leve solapamiento \\
+$> 2.0$ & Clusters mal definidos o mezclados \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Limitaciones}
+\begin{itemize}
+    \item \textbf{Sesgo hacia clusters convexos:}  
+    El uso de distancia euclidiana limita su desempeño en clusters con formas no convexas.
+    \item \textbf{Sensibilidad a outliers:}  
+    Puntos extremos pueden alterar significativamente los centroides.
+    \item \textbf{Suposición de tamaños similares:}  
+    Clusters muy desbalanceados pueden producir valores de DBI engañosos.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Davies–Bouldin Index} es una métrica geométrica que equilibra cohesión y separación en un mismo marco analítico.  
+Su simplicidad, interpretación directa y compatibilidad con diferentes métricas de distancia lo hacen ideal para evaluar y comparar resultados de clustering no supervisado.
+
+\end{document}

@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Calinski–Harabasz Index (CH Index)}
+
+\subsection*{Definición general}
+El \textbf{Calinski–Harabasz Index} (también conocido como \textit{Variance Ratio Criterion}) evalúa la calidad de un agrupamiento comparando la dispersión \textit{entre} clusters con la dispersión \textit{dentro} de los clusters.  
+Un valor alto indica clusters compactos y bien separados.
+
+\subsection*{Fórmula general}
+\[
+CH(k) = \frac{SS_B / (k-1)}{SS_W / (n-k)}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: Número total de puntos de datos.
+    \item $k$: Número de clusters.
+    \item $SS_B$: Suma de cuadrados entre clusters (\textit{Between-cluster Sum of Squares}).
+    \item $SS_W$: Suma de cuadrados dentro de clusters (\textit{Within-cluster Sum of Squares}).
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Suma de Cuadrados Dentro de Clusters (Cohesión)}
+\[
+SS_W = \sum_{i=1}^{k} \sum_{x \in C_i} \| x - \mu_i \|^2
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $C_i$: Conjunto de puntos pertenecientes al cluster $i$.
+    \item $\mu_i$: Centroide del cluster $i$.
+\end{itemize}
+\textit{Interpretación:} mide qué tan cerca están los puntos de su centroide.  
+Valores pequeños implican clusters compactos.
+
+\paragraph{2. Suma de Cuadrados Entre Clusters (Separación)}
+\[
+SS_B = \sum_{i=1}^{k} |C_i| \cdot \| \mu_i - \mu_{\text{global}} \|^2
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $|C_i|$: Tamaño del cluster $i$.
+    \item $\mu_{\text{global}}$: Centroide de todos los datos.
+\end{itemize}
+\textit{Interpretación:} mide la distancia de cada cluster al centro global.  
+Valores grandes reflejan clusters bien separados.
+
+\paragraph{3. Factores de normalización}
+\[
+(k-1): \text{grados de libertad entre clusters,} \quad (n-k): \text{grados de libertad dentro de clusters.}
+\]
+
+\subsection*{Interpretación conceptual}
+El índice $CH$ puede entenderse como una razón de varianzas, análoga al estadístico $F$ en ANOVA:
+\[
+CH = \frac{\text{Varianza entre grupos}}{\text{Varianza dentro de grupos}}
+\]
+\noindent
+Valores grandes indican una fuerte separación relativa entre los clusters comparada con su dispersión interna.
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $CH > 0$ (sin límite superior definido).
+    \item \textbf{Valores altos son mejores:} Clusters bien definidos y separados.
+    \item \textbf{Invariante a traslaciones:} Desplazar todos los datos no afecta el índice.
+    \item \textbf{Sensible a la escala:} Requiere datos normalizados.
+    \item \textbf{Penalización automática:} Aumentar $k$ incrementa $SS_W$ y disminuye $SS_B$, evitando sobreajuste.
+\end{itemize}
+
+\subsection*{Intuición geométrica}
+\begin{itemize}
+    \item Numerador grande ($SS_B$): Clusters alejados entre sí.
+    \item Denominador pequeño ($SS_W$): Puntos cercanos a sus centroides.
+    \item Resultado: Agrupamiento compacto y bien separado.
+\end{itemize}
+
+\subsection*{Limitaciones}
+\begin{itemize}
+    \item \textbf{Asume clusters convexos:} La distancia euclidiana no captura formas irregulares.
+    \item \textbf{Sensible a outliers:} Puntos extremos influyen en el cálculo de $SS_W$.
+    \item \textbf{Sesgo hacia clusters esféricos:} Favorece estructuras regulares sobre formas alargadas.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Calinski–Harabasz Index} mide el equilibrio entre cohesión y separación mediante una relación de varianzas.  
+Su fundamento estadístico y su interpretación directa lo convierten en una herramienta robusta para seleccionar el número óptimo de clusters y comparar configuraciones de agrupamiento.
+
+\end{document}

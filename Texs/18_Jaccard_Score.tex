@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Jaccard Score (Índice de Jaccard)}
+
+\subsection*{Fórmula fundamental}
+Para dos conjuntos $A$ y $B$, el índice de Jaccard se define como:
+\[
+J(A, B) = \frac{|A \cap B|}{|A \cup B|}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $|A \cap B|$: Tamaño de la intersección — elementos presentes en ambos conjuntos.
+    \item $|A \cup B|$: Tamaño de la unión — elementos presentes en al menos uno de los conjuntos.
+\end{itemize}
+
+\subsection*{Interpretación en ciencia de datos}
+En un contexto de clasificación:
+\[
+J = \frac{|y_{\text{true}} \cap y_{\text{pred}}|}{|y_{\text{true}} \cup y_{\text{pred}}|}
+\]
+donde $y_{\text{true}}$ son las etiquetas reales y $y_{\text{pred}}$ las etiquetas predichas por el modelo.
+
+\subsection*{Formulación alternativa (matriz de confusión)}
+Para un problema de clasificación binaria:
+\[
+J = \frac{TP}{TP + FP + FN}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos — predicciones correctas de la clase positiva.
+    \item $FP$: Falsos positivos — negativos clasificados incorrectamente como positivos.
+    \item $FN$: Falsos negativos — positivos clasificados incorrectamente como negativos.
+\end{itemize}
+
+\textbf{Nota:} Los Verdaderos Negativos ($TN$) no aparecen en la fórmula, característica distintiva del Jaccard Score, especialmente útil en escenarios donde los negativos son mayoría (datasets \textit{sparse}).
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $[0, 1]$
+    \begin{itemize}
+        \item $J = 1$ $\Rightarrow$ coincidencia perfecta ($A = B$)
+        \item $J = 0$ $\Rightarrow$ sin superposición ($A \cap B = \emptyset$)
+    \end{itemize}
+    \item \textbf{Simetría:} $J(A, B) = J(B, A)$, trata predicciones y etiquetas de manera equitativa.
+    \item \textbf{Monotonía:} Aumenta cuando mejora la similitud entre conjuntos.
+\end{itemize}
+
+\subsection*{Fundamento y ventajas}
+\begin{itemize}
+    \item \textbf{Penalización equilibrada:} Falsos positivos y falsos negativos afectan el resultado de forma simétrica.
+    \item \textbf{Ignora verdaderos negativos:} Ideal para problemas con clases desbalanceadas o múltiples categorías irrelevantes.
+    \item \textbf{Normalización natural:} Su escala $[0,1]$ permite interpretación directa como grado de similitud.
+\end{itemize}
+
+\subsection*{Ejemplo interpretativo}
+Si el modelo predice correctamente 80 casos positivos ($TP = 80$), se equivoca en 20 ($FP + FN = 20$):
+\[
+J = \frac{80}{80 + 20} = 0.80
+\]
+Esto indica una superposición del 80\% entre las etiquetas predichas y las verdaderas.
+
+\subsection*{Conclusión}
+El \textbf{Jaccard Score} mide la similitud entre predicciones y etiquetas reales de manera intuitiva y robusta.  
+Su independencia de los verdaderos negativos lo hace especialmente útil en contextos con clases raras o datasets desbalanceados, convirtiéndolo en una alternativa ideal al F1 Score en problemas de detección y segmentación.
+
+\end{document}

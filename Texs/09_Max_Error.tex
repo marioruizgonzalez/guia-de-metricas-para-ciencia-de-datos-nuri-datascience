@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Max Error}
+
+\subsection*{Fórmula principal}
+\[
+\text{Max Error} = \max_{i=1,\dots,n} \, |y_i - \hat{y}_i|
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $y_i$: valor real de la observación $i$
+    \item $\hat{y}_i$: valor predicho por el modelo
+    \item $|\,\cdot\,|$: valor absoluto (mide la magnitud del error)
+    \item $\max()$: operador que selecciona el error absoluto más grande
+    \item $n$: número total de observaciones
+\end{itemize}
+
+\subsection*{Desglose matemático}
+\begin{enumerate}
+    \item \textbf{Error individual:} 
+    \[
+    e_i = |y_i - \hat{y}_i|
+    \]
+    Cada error representa la distancia absoluta entre el valor real y la predicción.
+    
+    \item \textbf{Selección del máximo:}
+    \[
+    \text{Max Error} = \max \{ e_1, e_2, \dots, e_n \}
+    \]
+    De todos los errores individuales, se elige el más grande, representando el peor desempeño del modelo.
+\end{enumerate}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Sensibilidad extrema a outliers:} 
+    El valor está completamente determinado por una sola observación extrema.  
+    Incluso si el resto de las predicciones son perfectas, un solo error grande domina el resultado.
+    
+    \item \textbf{No aditividad:}  
+    No puede promediarse ni descomponerse como otras métricas (MAE, MSE).  
+    \[
+    \text{Max Error (total)} \neq \text{promedio de Max Error (subconjuntos)}
+    \]
+    
+    \item \textbf{Monotonía:}  
+    Si todos los errores disminuyen, el Max Error nunca aumenta.  
+    Si un solo error empeora y se convierte en el máximo, la métrica empeora inmediatamente.
+    
+    \item \textbf{Invarianza al escalado:}  
+    Para una constante $c > 0$,
+    \[
+    \text{Max Error}(c \cdot y, c \cdot \hat{y}) = c \cdot \text{Max Error}(y, \hat{y})
+    \]
+    manteniendo la proporcionalidad respecto a la escala de la variable objetivo.
+\end{itemize}
+
+\subsection*{Interpretación práctica}
+El \textbf{Max Error} mide el peor error absoluto cometido por el modelo.  
+Ofrece una visión conservadora del rendimiento, mostrando hasta qué punto el modelo puede fallar en el peor caso.
+
+\subsection*{Por qué funciona como métrica}
+\begin{itemize}
+    \item Identifica de forma directa el \textit{caso extremo} del error.  
+    \item Proporciona una \textbf{cota superior} del desempeño del modelo.  
+    \item Se expresa en las mismas unidades que la variable objetivo, lo que facilita su interpretación.  
+    \item Complementa métricas promedio (MAE, RMSE), mostrando aspectos que ellas pueden ocultar.
+\end{itemize}
+
+\subsection*{Limitaciones}
+\begin{itemize}
+    \item \textbf{Inestabilidad:} un solo dato atípico puede alterar completamente el valor.  
+    \item \textbf{Pérdida de información:} ignora la distribución completa de errores.  
+    \item \textbf{Dependencia del tamaño muestral:} tiende a aumentar con conjuntos de datos más grandes.
+\end{itemize}
+
+\subsection*{Resumen}
+El \textit{Max Error} cuantifica el peor desempeño individual del modelo.  
+Es una métrica útil para aplicaciones críticas o de riesgo, donde el error máximo es más relevante que el promedio, aunque su sensibilidad a valores extremos limita su uso como métrica única de evaluación.
+
+\end{document}

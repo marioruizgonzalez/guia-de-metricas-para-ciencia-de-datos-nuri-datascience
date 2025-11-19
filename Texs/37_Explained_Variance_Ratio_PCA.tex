@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Explained Variance Ratio}
+
+\subsection*{Definición general}
+El \textbf{Explained Variance Ratio (EVR)} mide la proporción de la varianza total de los datos originales que es capturada por cada componente principal en un análisis PCA.  
+Es una métrica fundamental para evaluar cuánta información conserva un modelo de reducción dimensional.
+
+\subsection*{Fórmula principal}
+\[
+\text{Explained Variance Ratio}_i = 
+\frac{\lambda_i}{\sum_{j=1}^{n} \lambda_j}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $\lambda_i$: valor propio (eigenvalue) del componente principal $i$.
+    \item $n$: número total de componentes (igual al número de variables originales).
+    \item $\sum_{j=1}^{n} \lambda_j$: varianza total de los datos originales.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Eigenvalues ($\lambda_i$)}
+\begin{itemize}
+    \item Representan la cantidad de varianza explicada por el componente principal $i$.
+    \item Se obtienen de la descomposición espectral de la matriz de covarianza:
+    \[
+    \Sigma = W \Lambda W^T
+    \]
+    donde $\Lambda = \text{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)$.
+    \item Están ordenados de mayor a menor: $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_n$.
+\end{itemize}
+
+\paragraph{2. Varianza total}
+\[
+\text{Varianza total} = \sum_{j=1}^{n} \lambda_j
+\]
+\noindent
+Equivale a la traza de la matriz de covarianza ($\text{Tr}(\Sigma)$), que es invariante ante rotaciones lineales.  
+Representa la varianza total presente en los datos originales.
+
+\subsection*{Varianza explicada acumulada}
+Para los primeros $k$ componentes:
+\[
+\text{Cumulative Explained Variance} = 
+\sum_{i=1}^{k} \frac{\lambda_i}{\sum_{j=1}^{n} \lambda_j}
+\]
+\noindent
+Este valor indica qué fracción de la varianza total se conserva al proyectar los datos en un subespacio de $k$ dimensiones.
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item Cada $\text{EVR}_i$ representa la proporción de información capturada por el componente $i$.
+    \item La suma de todos los $\text{EVR}_i$ es siempre 1:
+    \[
+    \sum_{i=1}^{n} \text{EVR}_i = 1
+    \]
+    \item La variación capturada disminuye progresivamente con cada componente adicional.
+\end{itemize}
+
+\subsection*{Por qué funciona como métrica}
+\begin{itemize}
+    \item \textbf{Conservación de información:} La varianza cuantifica la información o dispersión en los datos; mayor varianza implica mayor contenido informativo.
+    \item \textbf{Optimalidad de PCA:} Los componentes principales están ordenados de forma que cada nuevo componente captura la máxima varianza restante, garantizando eficiencia matemática.
+    \item \textbf{Interpretabilidad:} El ratio es fácilmente interpretable como porcentaje de información conservada ($0$ a $1$ o $0\%$ a $100\%$).
+    \item \textbf{Propiedad aditiva:} La suma de los EVR proporciona una visión completa de la distribución de información entre los componentes.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Explained Variance Ratio} permite determinar cuántos componentes principales conservar sin pérdida significativa de información.  
+Su análisis acumulativo ofrece una base objetiva para elegir el número óptimo de dimensiones, equilibrando precisión y eficiencia en modelos de reducción dimensional como PCA.
+
+\end{document}

@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Balanced Accuracy}
+
+\subsection*{Fórmula principal}
+Para un problema de clasificación binaria:
+\[
+\text{Balanced Accuracy} = \frac{\text{Sensitivity} + \text{Specificity}}{2}
+\]
+
+\noindent
+Donde:
+\[
+\text{Sensitivity} = \frac{TP}{TP + FN}, 
+\quad 
+\text{Specificity} = \frac{TN}{TN + FP}
+\]
+
+\noindent
+Para problemas multiclase:
+\[
+\text{Balanced Accuracy} = \frac{1}{n} \sum_{i=1}^{n} \text{Recall}_i
+\]
+Donde:
+\[
+\text{Recall}_i = \frac{TP_i}{TP_i + FN_i}
+\quad \text{y} \quad n = \text{número de clases.}
+\]
+
+\subsection*{Componentes matemáticos}
+\begin{itemize}
+    \item $TP$: Verdaderos positivos — predicciones correctas de la clase positiva.
+    \item $TN$: Verdaderos negativos — predicciones correctas de la clase negativa.
+    \item $FP$: Falsos positivos — observaciones negativas clasificadas como positivas.
+    \item $FN$: Falsos negativos — observaciones positivas clasificadas como negativas.
+\end{itemize}
+
+\subsection*{Interpretación y propiedades}
+\begin{itemize}
+    \item \textbf{Invarianza al desbalance:} promedia el Recall de cada clase, eliminando el sesgo hacia la clase mayoritaria.
+    \item \textbf{Rango:} $[0, 1]$
+    \begin{itemize}
+        \item $1.0$ → Clasificación perfecta.
+        \item $0.5$ → Rendimiento aleatorio (para clasificación binaria).
+        \item $< 0.5$ → Peor que el azar.
+    \end{itemize}
+    \item \textbf{Interpretabilidad:} representa el promedio de qué tan bien el modelo identifica cada clase individualmente.
+\end{itemize}
+
+\subsection*{Ejemplo ilustrativo}
+Consideremos un dataset con 1000 muestras de la clase A y 10 de la clase B.  
+Un modelo que predice siempre la clase A obtiene:
+
+\[
+\text{Sensitivity}_A = \frac{1000}{1000} = 1.0,
+\quad
+\text{Sensitivity}_B = \frac{0}{10} = 0.0
+\]
+\[
+\text{Balanced Accuracy} = \frac{1.0 + 0.0}{2} = 0.5
+\]
+\[
+\text{Accuracy tradicional} = \frac{1000}{1010} = 0.99
+\]
+
+\noindent
+La \textit{Balanced Accuracy} revela que el modelo no es mejor que el azar,  
+mientras que la exactitud tradicional sugiere un rendimiento engañosamente alto.
+
+\subsection*{Conclusión}
+La \textbf{Balanced Accuracy} es una métrica robusta y equitativa para evaluar modelos en datasets desbalanceados.  
+Al considerar la capacidad del modelo para reconocer tanto clases positivas como negativas,  
+proporciona una medida más justa y matemáticamente estable del rendimiento real de la clasificación.
+
+\end{document}

@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Precision–Recall Curve (PR Curve)}
+
+\subsection*{Definiciones base}
+La \textbf{Curva Precision–Recall (PR)} se construye a partir de dos métricas esenciales derivadas de la matriz de confusión:
+
+\[
+\begin{array}{c|cc}
+ & \text{Predicción Positiva} & \text{Predicción Negativa} \\
+\hline
+\text{Real Positiva} & TP & FN \\
+\text{Real Negativa} & FP & TN \\
+\end{array}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos (casos correctamente clasificados como positivos)
+    \item $FP$: Falsos positivos (negativos mal clasificados como positivos)
+    \item $FN$: Falsos negativos (positivos mal clasificados como negativos)
+    \item $TN$: Verdaderos negativos (casos correctamente clasificados como negativos)
+\end{itemize}
+
+\subsection*{Fórmulas fundamentales}
+
+\paragraph{Precisión (Precision):}
+\[
+\text{Precision} = \frac{TP}{TP + FP}
+\]
+\textbf{Interpretación:} De todas las predicciones positivas realizadas, indica qué fracción fue correcta.
+
+\paragraph{Exhaustividad (Recall o Sensibilidad):}
+\[
+\text{Recall} = \frac{TP}{TP + FN}
+\]
+\textbf{Interpretación:} De todos los casos realmente positivos, muestra qué proporción fue detectada correctamente.
+
+\subsection*{Construcción de la curva}
+El proceso para generar la curva PR es el siguiente:
+\begin{enumerate}
+    \item \textbf{Ordenar predicciones:}  
+    Organizar las muestras por su score de probabilidad, de mayor a menor.
+    \item \textbf{Variar el umbral:}  
+    Usar cada score único como punto de corte para clasificar.
+    \item \textbf{Calcular métricas:}  
+    Obtener Precision y Recall en cada umbral.
+    \item \textbf{Graficar:}  
+    Representar \textit{Recall} en el eje $X$ y \textit{Precision} en el eje $Y$.
+\end{enumerate}
+
+\subsection*{Área Bajo la Curva (AUC–PR)}
+El área bajo la curva Precision–Recall se define como:
+\[
+AUC\text{-}PR = \int_{0}^{1} \text{Precision(Recall)} \, d(\text{Recall})
+\]
+
+\noindent
+En forma discreta, se aproxima mediante la regla del trapecio:
+\[
+AUC\text{-}PR \approx \sum_{i=1}^{n-1} (\text{Recall}_{i+1} - \text{Recall}_i)
+\times \frac{(\text{Precision}_{i+1} + \text{Precision}_i)}{2}
+\]
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item $AUC\text{-}PR = 1.0$: Modelo perfecto (Precision = 1 para todo Recall).
+    \item $AUC\text{-}PR = \text{Prevalencia}$: Clasificador aleatorio.
+\end{itemize}
+
+\noindent
+\textbf{Baseline aleatoria:}
+\begin{itemize}
+    \item Dataset balanceado: $AUC\text{-}PR \approx 0.5$
+    \item Dataset desbalanceado: $AUC\text{-}PR \approx \text{prevalencia} = \frac{\text{casos positivos}}{\text{total}}$
+\end{itemize}
+
+\subsection*{Trade-off matemático entre Precision y Recall}
+Existe una relación inversa entre ambas métricas:
+\begin{itemize}
+    \item Umbrales más altos $\Rightarrow$ menos predicciones positivas  
+    $\Rightarrow$ mayor precisión, menor recall.
+    \item Umbrales más bajos $\Rightarrow$ más predicciones positivas  
+    $\Rightarrow$ menor precisión, mayor recall.
+\end{itemize}
+
+\noindent
+Debido a esta relación, optimizar simultáneamente Precision y Recall es matemáticamente imposible.  
+La elección del punto óptimo depende del contexto del problema (por ejemplo, priorizar precisión en detección de fraude o recall en diagnósticos médicos).
+
+\subsection*{Conclusión}
+La \textbf{Precision–Recall Curve} ofrece una evaluación detallada del rendimiento del modelo en contextos desbalanceados, donde la curva ROC puede resultar engañosa.  
+El \textbf{AUC–PR} resume en un solo valor la calidad del balance entre la exactitud de las predicciones positivas y la capacidad de detección de casos positivos reales.
+
+\end{document}

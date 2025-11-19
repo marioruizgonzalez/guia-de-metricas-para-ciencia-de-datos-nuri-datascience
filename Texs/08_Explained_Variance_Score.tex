@@ -1,0 +1,66 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Explained Variance Score}
+
+\subsection*{Fórmula principal}
+\[
+\text{Explained Variance} = 1 - \frac{\text{Var}(y - \hat{y})}{\text{Var}(y)}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $y$: valores reales
+    \item $\hat{y}$: valores predichos por el modelo
+    \item $\text{Var}()$: operador de varianza
+\end{itemize}
+
+\subsection*{Desglose de componentes}
+\begin{itemize}
+    \item $\text{Var}(y)$: varianza total de los valores reales, representa la variabilidad inherente de los datos.
+    \item $\text{Var}(y - \hat{y})$: varianza de los residuos, mide la parte de la variabilidad que el modelo no logra explicar.
+    \item $\dfrac{\text{Var}(y - \hat{y})}{\text{Var}(y)}$: proporción de varianza no explicada.
+    \item $1 - \dfrac{\text{Var}(y - \hat{y})}{\text{Var}(y)}$: proporción de varianza explicada por el modelo.
+\end{itemize}
+
+\subsection*{Interpretación}
+El \textbf{Explained Variance Score} mide cuánta variabilidad de los datos de salida es capturada por el modelo.  
+A diferencia del $R^2$, no compara el modelo con la media, sino que evalúa directamente la reducción de la varianza residual.
+
+\subsection*{Escala de interpretación}
+\begin{itemize}
+    \item $1.0$: modelo perfecto (toda la varianza explicada)
+    \item $0.8$–$0.9$: modelo excelente
+    \item $0.6$–$0.8$: modelo bueno
+    \item $0.3$–$0.6$: modelo aceptable o moderado
+    \item $<0.3$: modelo pobre
+    \item $<0$: modelo peor que predecir la media
+\end{itemize}
+
+\subsection*{Fundamento matemático}
+El valor de esta métrica proviene de la relación entre la varianza total y la varianza de los errores.  
+Su diseño permite:
+\begin{itemize}
+    \item Ser \textbf{invariante a la escala} de los datos.
+    \item Comparar modelos en \textbf{diferentes conjuntos de datos o dominios}.
+    \item Proporcionar una \textbf{medida directa de eficiencia} en la explicación de la variabilidad.
+\end{itemize}
+
+\subsection*{Resumen}
+El \textit{Explained Variance Score} cuantifica la fracción de la variabilidad del objetivo que el modelo logra capturar.  
+Mientras que el $R^2$ evalúa la proporción de mejora respecto a un modelo base, esta métrica se enfoca en la estabilidad y consistencia de las predicciones, siendo especialmente útil en modelos de regresión donde interesa la dispersión de los errores más que su sesgo promedio.
+
+\end{document}

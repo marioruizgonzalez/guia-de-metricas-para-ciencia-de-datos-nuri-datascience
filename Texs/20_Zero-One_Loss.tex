@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Zero-One Loss}
+
+\subsection*{Fórmula principal}
+Para un conjunto de datos con $n$ muestras, donde $\hat{y}_i$ es la predicción para la muestra $i$ y $y_i$ es la etiqueta verdadera:
+
+\[
+\text{Zero-One Loss} = \frac{1}{n} \sum_{i=1}^{n} L_{0-1}(y_i, \hat{y}_i)
+\]
+
+\noindent
+La función de pérdida individual se define como:
+\[
+L_{0-1}(y_i, \hat{y}_i) =
+\begin{cases}
+0, & \text{si } y_i = \hat{y}_i \quad \text{(predicción correcta)} \\
+1, & \text{si } y_i \neq \hat{y}_i \quad \text{(predicción incorrecta)}
+\end{cases}
+\]
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Función indicadora.}
+La función $L_{0-1}$ puede expresarse de forma más compacta mediante la función indicadora:
+\[
+L_{0-1}(y_i, \hat{y}_i) = I(y_i \neq \hat{y}_i)
+\]
+donde $I(\cdot)$ vale 1 cuando la condición es verdadera y 0 en caso contrario.  
+Esta función mapea el espacio de predicciones al conjunto $\{0, 1\}$, diferenciando entre aciertos y errores.
+
+\paragraph{2. Promedio aritmético.}
+El término $\frac{1}{n}$ normaliza la suma de errores, obteniendo la tasa promedio de predicciones incorrectas sobre el total de observaciones.
+
+\paragraph{3. Relación con \textit{Accuracy}.}
+Existe una relación directa e inversa entre ambas métricas:
+\[
+\text{Accuracy} = 1 - \text{Zero-One Loss}
+\quad \Longleftrightarrow \quad
+\text{Zero-One Loss} = 1 - \text{Accuracy}
+\]
+Por tanto, minimizar la \textit{Zero-One Loss} equivale a maximizar la precisión del modelo.
+
+\subsection*{Propiedades matemáticas clave}
+\begin{itemize}
+    \item \textbf{Rango:} $[0, 1]$
+    \begin{itemize}
+        \item $0$: Clasificación perfecta.
+        \item $1$: Clasificación completamente errónea.
+    \end{itemize}
+    \item \textbf{Monotonicidad:}  
+    A menor \textit{Zero-One Loss}, mejor rendimiento del modelo.
+    \item \textbf{Invariancia a transformaciones:}  
+    No se ve afectada por transformaciones lineales de las características de entrada.
+    \item \textbf{Simetría:}  
+    Todos los errores se penalizan por igual, sin importar la clase o tipo de error.
+\end{itemize}
+
+\subsection*{Interpretación probabilística}
+Desde una perspectiva bayesiana, la \textit{Zero-One Loss} representa la función de pérdida natural cuando todos los errores de clasificación tienen el mismo costo.  
+Minimizar esta pérdida equivale a aplicar el principio de \textit{riesgo esperado mínimo} bajo una distribución de costos uniforme, lo que la hace ideal en escenarios donde los errores poseen igual relevancia.
+
+\subsection*{Conclusión}
+La \textbf{Zero-One Loss} ofrece una medida simple y robusta del rendimiento de un clasificador.  
+Su formulación discreta y su relación directa con la precisión la convierten en un punto de referencia esencial para evaluar modelos de clasificación en contextos equilibrados o cuando se desea un criterio uniforme de error.
+
+\end{document}

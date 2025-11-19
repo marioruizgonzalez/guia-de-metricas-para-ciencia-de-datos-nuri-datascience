@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{ROC Curve y AUC (Área Bajo la Curva)}
+
+\subsection*{Componentes fundamentales}
+La \textbf{Curva ROC (Receiver Operating Characteristic)} se construye a partir de dos métricas derivadas de la matriz de confusión:
+
+\[
+\begin{array}{c|cc}
+ & \text{Predicción Negativa} & \text{Predicción Positiva} \\
+\hline
+\text{Real Negativa} & TN & FP \\
+\text{Real Positiva} & FN & TP \\
+\end{array}
+\]
+
+\subsubsection*{1. Tasa de Verdaderos Positivos (TPR o Sensibilidad)}
+\[
+TPR = \frac{TP}{TP + FN} = \frac{TP}{P}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos correctamente identificados.
+    \item $FN$: Falsos negativos, casos positivos omitidos por el modelo.
+    \item $P$: Total de casos positivos reales.
+\end{itemize}
+\textbf{Interpretación:} proporción de positivos reales correctamente detectados.
+
+\subsubsection*{2. Tasa de Falsos Positivos (FPR o 1 - Especificidad)}
+\[
+FPR = \frac{FP}{FP + TN} = \frac{FP}{N}
+\]
+\noindent
+Donde:
+\begin{itemize}
+    \item $FP$: Falsos positivos, casos negativos clasificados como positivos.
+    \item $TN$: Verdaderos negativos correctamente identificados.
+    \item $N$: Total de casos negativos reales.
+\end{itemize}
+\textbf{Interpretación:} proporción de negativos reales que el modelo clasifica erróneamente como positivos.
+
+\subsection*{Construcción de la Curva ROC}
+El procedimiento se basa en variar el \textit{umbral de decisión} del modelo:
+\begin{enumerate}
+    \item Ordenar las predicciones por su puntaje de confianza.
+    \item Para cada valor posible de umbral, calcular $TPR$ y $FPR$.
+    \item Graficar $FPR$ en el eje $X$ y $TPR$ en el eje $Y$.
+\end{enumerate}
+
+\subsubsection*{Puntos característicos de la curva}
+\begin{itemize}
+    \item $(0,0)$: Umbral máximo — todas las instancias son negativas.
+    \item $(1,1)$: Umbral mínimo — todas las instancias son positivas.
+    \item Línea diagonal: Clasificador aleatorio ($AUC = 0.5$).
+    \item Esquina superior izquierda $(0,1)$: Clasificador perfecto.
+\end{itemize}
+
+\subsection*{Área Bajo la Curva (AUC)}
+El \textbf{AUC} cuantifica el rendimiento global del modelo:
+\[
+AUC = \int_{0}^{1} TPR(FPR^{-1}(x)) \, dx
+\]
+
+\subsubsection*{Interpretación probabilística}
+El AUC representa la probabilidad de que el modelo asigne un puntaje mayor a una muestra positiva que a una negativa seleccionadas aleatoriamente.
+
+\subsubsection*{Escala de interpretación}
+\begin{itemize}
+    \item $1.0$: Clasificador perfecto.
+    \item $0.9 - 1.0$: Excelente discriminación.
+    \item $0.8 - 0.9$: Buen rendimiento.
+    \item $0.7 - 0.8$: Aceptable.
+    \item $0.6 - 0.7$: Débil.
+    \item $0.5$: Aleatorio (sin poder discriminativo).
+    \item $< 0.5$: Peor que aleatorio (invertible).
+\end{itemize}
+
+\subsection*{Fundamento matemático y propiedades}
+\begin{itemize}
+    \item \textbf{Invarianza de escala:}  
+    Evalúa la capacidad de clasificación relativa, sin depender de la magnitud de los scores.
+    \item \textbf{Independencia del umbral:}  
+    Considera todos los posibles puntos de corte, evaluando la calidad del \textit{ranking}.
+    \item \textbf{Interpretación geométrica:}  
+    El área bajo la curva corresponde directamente a la capacidad discriminativa del modelo.
+    \item \textbf{Conexión estadística:}  
+    Matemáticamente equivalente al estadístico de \textit{Mann–Whitney U}.
+\end{itemize}
+
+\subsection*{Conclusión}
+La \textbf{Curva ROC} y su área bajo la curva (\textbf{AUC}) ofrecen una visión integral del desempeño de modelos probabilísticos, especialmente útil en contextos desbalanceados o con umbrales variables.  
+Cuanto mayor sea el área, mayor es la habilidad del modelo para distinguir entre clases positivas y negativas.
+
+\end{document}

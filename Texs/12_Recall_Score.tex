@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Recall (Sensibilidad)}
+
+\subsection*{Fórmula principal}
+\[
+\text{Recall} = \frac{TP}{TP + FN}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $TP$: Verdaderos positivos — casos positivos correctamente clasificados.
+    \item $FN$: Falsos negativos — casos positivos incorrectamente clasificados como negativos.
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+\begin{itemize}
+    \item \textbf{Numerador ($TP$):} Representa los aciertos del modelo sobre la clase positiva.
+    \item \textbf{Denominador ($TP + FN$):} Indica el total real de observaciones positivas en el dataset.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+El \textbf{Recall} puede entenderse como una probabilidad condicional:
+\[
+P(\text{Predicción = Positiva} \;|\; \text{Realidad = Positiva})
+\]
+\noindent
+Es decir: “dado que una instancia realmente pertenece a la clase positiva, ¿con qué probabilidad el modelo la identifica correctamente?”.
+
+\subsection*{Rango y significado}
+\begin{itemize}
+    \item $\text{Recall} = 0.0$: el modelo no detecta ningún caso positivo.
+    \item $\text{Recall} = 1.0$: el modelo detecta todos los casos positivos.
+    \item $\text{Recall} = 0.8$: el modelo identifica correctamente 8 de cada 10 casos positivos reales.
+\end{itemize}
+
+\subsection*{Relación con otras métricas}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+ & \textbf{Predicción Negativa} & \textbf{Predicción Positiva} \\
+\hline
+\textbf{Real Negativo} & TN & FP \\
+\hline
+\textbf{Real Positivo} & FN & TP \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+A partir de esta matriz:
+\[
+\text{Recall} = \frac{TP}{TP + FN} \quad \text{(fila de positivos reales)}
+\]
+\[
+\text{Precision} = \frac{TP}{TP + FP} \quad \text{(columna de predicciones positivas)}
+\]
+\[
+\text{Specificity} = \frac{TN}{TN + FP} \quad \text{(fila de negativos reales)}
+\]
+
+\subsection*{Justificación matemática}
+\begin{itemize}
+    \item \textbf{Sensibilidad al desbalance:} el Recall se centra en la clase positiva, siendo ideal para problemas donde los falsos negativos son costosos.
+    \item \textbf{Interpretabilidad directa:} expresa el porcentaje de casos positivos correctamente identificados.
+    \item \textbf{Complementariedad:} junto con la Precision, proporciona una visión completa del rendimiento predictivo.
+\end{itemize}
+
+\subsection*{Resumen}
+El \textit{Recall} o \textit{Sensibilidad} mide la capacidad del modelo para capturar los casos positivos reales.  
+Es esencial en contextos donde los falsos negativos deben minimizarse, como en detección de enfermedades, fraudes o fallas críticas.  
+Su análisis combinado con la Precision conduce al \textbf{F1-Score}, una medida equilibrada entre ambos aspectos del rendimiento.
+
+\end{document}

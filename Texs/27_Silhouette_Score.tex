@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Silhouette Score}
+
+\subsection*{Definición general}
+El \textbf{Silhouette Score} mide la calidad de un agrupamiento (\textit{clustering}) evaluando simultáneamente la \textit{cohesión interna} y la \textit{separación externa} de los clusters.  
+Matemáticamente, cuantifica qué tan bien asignado está cada punto a su grupo.
+
+\subsection*{Fórmula individual}
+Para un punto de datos $i$, el coeficiente de silueta se define como:
+
+\[
+s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $a(i)$: Distancia promedio \textit{intra-cluster}.
+    \[
+    a(i) = \frac{1}{|C_I| - 1} \sum_{j \in C_I, j \neq i} d(i, j)
+    \]
+    Representa qué tan compacto es el cluster al que pertenece $i$.
+    \item $b(i)$: Distancia promedio al cluster más cercano.
+    \[
+    b(i) = \min_{J \neq I} \left\{ \frac{1}{|C_J|} \sum_{k \in C_J} d(i, k) \right\}
+    \]
+    Mide la separación del punto $i$ respecto al cluster más próximo.
+\end{itemize}
+
+\noindent
+Con:
+\begin{itemize}
+    \item $C_I$: Cluster al que pertenece el punto $i$.
+    \item $|C_I|$: Número de puntos dentro del cluster $I$.
+    \item $d(i,j)$: Distancia entre los puntos $i$ y $j$ (euclidiana, Manhattan, coseno, etc.).
+\end{itemize}
+
+\subsection*{Silhouette Score global}
+El promedio general del coeficiente de silueta para todas las observaciones es:
+
+\[
+\text{Silhouette Score} = \frac{1}{n} \sum_{i=1}^{n} s(i)
+\]
+
+\noindent
+Donde $n$ es el número total de puntos en el conjunto de datos.
+
+\subsection*{Interpretación matemática}
+
+\paragraph{Caso ideal ($s(i) \to 1$):}
+\begin{itemize}
+    \item $a(i) \to 0$ — el punto está muy cerca de otros puntos de su mismo cluster.
+    \item $b(i)$ es grande — el punto está bien separado de otros clusters.
+    \item Resultado: agrupamiento perfecto para este punto.
+\end{itemize}
+
+\paragraph{Caso problemático ($s(i) \to -1$):}
+\begin{itemize}
+    \item $a(i)$ es grande — el punto está lejos de los miembros de su propio cluster.
+    \item $b(i) \to 0$ — el punto está más cerca de otro cluster.
+    \item Resultado: el punto probablemente está mal asignado.
+\end{itemize}
+
+\paragraph{Caso límite ($s(i) \approx 0$):}
+\begin{itemize}
+    \item $a(i) \approx b(i)$ — el punto está equidistante entre su cluster y el vecino.
+    \item Resultado: el punto se encuentra en la frontera entre clusters.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $s(i) \in [-1, 1]$
+    \begin{itemize}
+        \item $1$: Asignación óptima.
+        \item $0$: Punto fronterizo.
+        \item $-1$: Asignación incorrecta.
+    \end{itemize}
+    \item \textbf{Normalización:} La división por $\max(a(i), b(i))$ asegura escala uniforme e interpretación comparativa.
+    \item \textbf{Balance:} Penaliza tanto baja cohesión interna como baja separación entre clusters.
+    \item \textbf{Robustez:} Puede aplicarse con cualquier métrica de distancia.
+\end{itemize}
+
+\subsection*{Ventajas e interpretabilidad}
+\begin{itemize}
+    \item No requiere conocimiento previo del número “correcto” de clusters — puede compararse entre distintas configuraciones de $k$.
+    \item Altamente interpretable: un valor cercano a $1$ indica un clustering bien definido, mientras que valores negativos sugieren mezclas o solapamientos entre grupos.
+    \item Adecuado para evaluación global o por punto individual.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Silhouette Score} combina cohesión y separación en una única métrica normalizada, ofreciendo una visión matemática y geométrica clara de la calidad del agrupamiento.  
+Su simplicidad y robustez lo convierten en una de las métricas más utilizadas en evaluación no supervisada.
+
+\end{document}

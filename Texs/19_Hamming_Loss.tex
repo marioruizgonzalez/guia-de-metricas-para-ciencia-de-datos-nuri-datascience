@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Hamming Loss}
+
+\subsection*{Fórmula principal}
+\[
+\text{Hamming Loss} = \frac{1}{n} \times \frac{1}{L} \sum_{i=1}^{n} \sum_{j=1}^{L} \text{XOR}(y_{ij}, \hat{y}_{ij})
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: Número total de muestras en el conjunto de datos.
+    \item $L$: Número total de etiquetas posibles.
+    \item $y_{ij}$: Valor verdadero de la etiqueta $j$ para la muestra $i$ (0 o 1).
+    \item $\hat{y}_{ij}$: Valor predicho de la etiqueta $j$ para la muestra $i$ (0 o 1).
+    \item $\text{XOR}(y_{ij}, \hat{y}_{ij})$: Devuelve 1 si los valores difieren (error) y 0 si son iguales (acierto).
+\end{itemize}
+
+\subsection*{Análisis de componentes}
+\begin{itemize}
+    \item \textbf{Operación XOR:}  
+    Captura tanto falsos positivos como falsos negativos:
+    \begin{itemize}
+        \item $y_{ij} = 1, \ \hat{y}_{ij} = 0 \Rightarrow$ Falso Negativo.
+        \item $y_{ij} = 0, \ \hat{y}_{ij} = 1 \Rightarrow$ Falso Positivo.
+        \item $y_{ij} = \hat{y}_{ij} \Rightarrow$ Predicción correcta.
+    \end{itemize}
+    \item \textbf{Sumatoria por etiquetas $(\sum_{j=1}^{L})$:}  
+    Suma los errores de todas las etiquetas para una muestra específica.
+    \item \textbf{Sumatoria por muestras $(\sum_{i=1}^{n})$:}  
+    Acumula los errores totales en todas las observaciones.
+    \item \textbf{Normalización doble $(1/L)$ y $(1/n)$:}  
+    Convierte los errores en una proporción promedio sobre todas las etiquetas y todas las muestras.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $[0, 1]$, donde:
+    \begin{itemize}
+        \item $0$: Predicciones perfectas.
+        \item $1$: Error máximo posible (todas las etiquetas incorrectas).
+    \end{itemize}
+    \item \textbf{Simetría:} Trata falsos positivos y falsos negativos de manera equivalente.
+    \item \textbf{Interpretabilidad:}  
+    Representa directamente la fracción de etiquetas incorrectas promedio por muestra.
+    \item \textbf{Granularidad:}  
+    Evalúa cada par $(\text{muestra}, \text{etiqueta})$ de forma independiente, proporcionando una visión detallada del error.
+\end{itemize}
+
+\subsection*{Relación con otras métricas}
+Existe una relación directa con la \textbf{Hamming Accuracy}:
+\[
+\text{Hamming Accuracy} = 1 - \text{Hamming Loss}
+\]
+\noindent
+Por lo tanto, un modelo con $\text{Hamming Loss} = 0.05$ tiene una precisión promedio de $95\%$ en la predicción de etiquetas.
+
+\subsection*{Conclusión}
+El \textbf{Hamming Loss} es especialmente útil en problemas de clasificación multilabel, donde cada instancia puede tener múltiples etiquetas verdaderas.  
+Su estructura matemática sencilla y su capacidad para reflejar errores a nivel de etiqueta lo convierten en una métrica robusta y ampliamente interpretada en contextos de aprendizaje supervisado multiclase o multilabel.
+
+\end{document}

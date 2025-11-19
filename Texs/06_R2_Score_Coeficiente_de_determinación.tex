@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{R² Score (Coeficiente de Determinación)}
+
+\subsection*{Fórmula principal}
+\[
+R^2 = 1 - \frac{SS_{res}}{SS_{tot}}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $SS_{res} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$ \quad (Suma de cuadrados de los residuos)
+    \item $SS_{tot} = \sum_{i=1}^{n} (y_i - \bar{y})^2$ \quad (Suma total de cuadrados)
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+El \textbf{R² Score} mide la proporción de la varianza total de los datos que el modelo logra explicar.  
+Su fórmula puede reescribirse como:
+\[
+R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}
+\]
+\noindent
+donde el numerador representa el error del modelo y el denominador la variabilidad total del conjunto de datos.
+
+\subsection*{Desglose de componentes}
+\begin{itemize}
+    \item \textbf{$SS_{res}$:} mide el error residual, es decir, cuánto difieren las predicciones de los valores reales.
+    \item \textbf{$SS_{tot}$:} mide la variabilidad total respecto a la media $\bar{y}$.
+    \item La razón $\dfrac{SS_{res}}{SS_{tot}}$ representa la fracción de la varianza que el modelo no logra explicar.
+\end{itemize}
+
+\subsection*{Interpretación práctica}
+\[
+R^2 = 1 - \frac{SS_{res}}{SS_{tot}}
+\]
+\noindent
+\begin{itemize}
+    \item Si $SS_{res} = 0$: $R^2 = 1$ → predicciones perfectas.
+    \item Si $SS_{res} = SS_{tot}$: $R^2 = 0$ → el modelo no mejora sobre predecir la media.
+    \item Si $SS_{res} > SS_{tot}$: $R^2 < 0$ → el modelo es peor que usar la media como predictor.
+\end{itemize}
+
+\subsection*{Propiedades matemáticas}
+\begin{itemize}
+    \item \textbf{Rango:} $(-\infty, 1]$
+    \item \textbf{Interpretación geométrica:} $R^2$ mide la proporción de varianza explicada por la proyección del vector de observaciones sobre el espacio generado por las predicciones.
+    \item \textbf{Relación con la correlación lineal:} Para modelos lineales simples,
+    \[
+    R^2 = r^2
+    \]
+    donde $r$ es el coeficiente de correlación de Pearson.
+\end{itemize}
+
+\subsection*{Resumen}
+El coeficiente de determinación $R^2$ indica qué tan bien un modelo explica la variabilidad de los datos.  
+Un valor cercano a 1 significa un ajuste excelente, mientras que valores cercanos a 0 o negativos sugieren un modelo ineficiente o mal especificado.
+
+\end{document}

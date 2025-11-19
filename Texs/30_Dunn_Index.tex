@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Dunn Index (DI)}
+
+\subsection*{Definición general}
+El \textbf{Dunn Index} mide la calidad de un agrupamiento considerando la relación entre la mínima distancia entre clusters y el máximo diámetro dentro de los clusters.  
+Un valor alto indica una buena separación entre grupos y alta cohesión interna.
+
+\subsection*{Fórmula general}
+\[
+DI = \frac{\min_{1 \le i < j \le k} \delta(C_i, C_j)}{\max_{1 \le l \le k} \Delta(C_l)}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $k$: Número total de clusters.
+    \item $C_i, C_j$: Clusters $i$ y $j$ (con $i \neq j$).
+    \item $\delta(C_i, C_j)$: Distancia mínima entre clusters $i$ y $j$ (separación inter-cluster).
+    \item $\Delta(C_l)$: Diámetro máximo del cluster $l$ (compacidad intra-cluster).
+\end{itemize}
+
+\subsection*{Componentes matemáticos}
+
+\paragraph{1. Separación inter-cluster}
+\[
+\delta(C_i, C_j) = \min \{ d(x, y) : x \in C_i, \, y \in C_j \}
+\]
+\noindent
+\textit{Interpretación:} Es la menor distancia entre cualquier par de puntos pertenecientes a clusters distintos.  
+Mide qué tan bien separados están los clusters.
+
+\paragraph{2. Compacidad intra-cluster}
+\[
+\Delta(C_l) = \max \{ d(x, y) : x, y \in C_l \}
+\]
+\noindent
+\textit{Interpretación:} Es la máxima distancia entre dos puntos dentro del mismo cluster.  
+Mide la dispersión interna o “diámetro” del cluster.
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item \textbf{Numerador:} Representa la mínima separación entre todos los pares de clusters ($\min \delta(C_i, C_j)$).
+    \item \textbf{Denominador:} Representa la máxima dispersión interna entre los clusters ($\max \Delta(C_l)$).
+    \item \textbf{Resultado:} Cuanto mayor sea el cociente, mejor es la estructura del clustering.
+\end{itemize}
+
+\subsection*{Propiedades y rango}
+\begin{itemize}
+    \item \textbf{Rango:} $DI \in [0, +\infty)$.
+    \item \textbf{Interpretación:}  
+    Valores grandes indican clusters bien separados y compactos.
+    \item \textbf{Valor ideal:} No tiene un máximo teórico; se busca maximizar el índice.
+\end{itemize}
+
+\subsection*{Fundamento teórico}
+El \textbf{Dunn Index} combina dos objetivos opuestos:
+\begin{enumerate}
+    \item Maximizar la \textbf{separación entre clusters} ($\delta$).
+    \item Minimizar la \textbf{dispersión interna} ($\Delta$).
+\end{enumerate}
+Esto garantiza que los grupos formados sean simultáneamente compactos y bien definidos.
+
+\subsection*{Propiedades matemáticas clave}
+\begin{itemize}
+    \item \textbf{Normalización implícita:} La relación $\delta / \Delta$ lo hace independiente de la escala de los datos.
+    \item \textbf{Sensibilidad:} Penaliza fuerte a agrupamientos con solapamientos o clusters dispersos.
+    \item \textbf{Invarianza a traslaciones:} Desplazar los datos no cambia el índice.
+\end{itemize}
+
+\subsection*{Ventajas e interpretación práctica}
+\begin{itemize}
+    \item Ideal para evaluar la separación relativa entre clusters.
+    \item Útil como criterio de selección del número óptimo de clusters $k$.
+    \item Un Dunn Index bajo sugiere solapamiento o mala compactación de grupos.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Dunn Index} ofrece una métrica intuitiva para evaluar la calidad de un clustering mediante una simple relación entre cohesión y separación.  
+Su formulación geométrica y su independencia de escala lo convierten en un complemento ideal al \textit{Silhouette}, \textit{Davies–Bouldin} y \textit{Calinski–Harabasz} para una evaluación integral de modelos no supervisados.
+
+\end{document}

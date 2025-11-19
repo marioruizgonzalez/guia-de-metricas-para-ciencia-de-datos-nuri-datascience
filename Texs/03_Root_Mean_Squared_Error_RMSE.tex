@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle  % Desactivado para no mostrar título
+
+\section*{Root Mean Squared Error (RMSE)}
+
+\subsection*{Fórmula del RMSE}
+\[
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} = \sqrt{MSE}
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: número total de observaciones
+    \item $y_i$: valor real
+    \item $\hat{y}_i$: valor predicho por el modelo
+\end{itemize}
+
+\subsection*{Interpretación}
+El \textbf{Root Mean Squared Error (RMSE)} mide la desviación cuadrática media entre las predicciones y los valores reales.  
+Su principal ventaja sobre el MSE es que devuelve el error promedio en las mismas unidades que la variable objetivo.
+
+\subsection*{Propiedades clave}
+\begin{itemize}
+    \item Es siempre \textbf{no negativo}: $RMSE \ge 0$, siendo 0 el valor ideal.
+    \item Usa la \textbf{distancia L2 (Euclidiana)} como referencia geométrica.
+    \item Es \textbf{sensible a outliers}, pero menos que el MSE al aplicar la raíz cuadrada.
+    \item Escala linealmente: $RMSE(a \times y, a \times \hat{y}) = |a| \times RMSE(y, \hat{y})$.
+\end{itemize}
+
+\subsection*{Relaciones importantes}
+\[
+MAE \le RMSE \le \sqrt{n} \times MAE
+\]
+\noindent
+y su conexión con otras métricas:
+\begin{itemize}
+    \item $RMSE = \sqrt{MSE}$, devolviendo las unidades originales.
+    \item $R^2 = 1 - \dfrac{RMSE_{modelo}^2}{RMSE_{baseline}^2}$.
+\end{itemize}
+
+\subsection*{Interpretación estadística}
+Cuando los errores se distribuyen normalmente $N(0, \sigma)$:
+\[
+RMSE \approx \sigma
+\]
+\noindent
+lo que significa que:
+\begin{itemize}
+    \item $\sim68\%$ de las predicciones están dentro de $\pm RMSE$
+    \item $\sim95\%$ dentro de $\pm 2 \times RMSE$
+\end{itemize}
+
+\subsection*{Resumen}
+El RMSE es una métrica universal para evaluar la precisión de modelos de regresión.  
+Combina la interpretabilidad del MAE con la sensibilidad del MSE, siendo un indicador robusto del rendimiento promedio de las predicciones.
+
+\end{document}

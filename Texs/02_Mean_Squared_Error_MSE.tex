@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+\section*{Mean Squared Error (MSE)}
+
+\subsection*{Fórmula del MSE}
+\[
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $n$: número total de observaciones
+    \item $y_i$: valor real
+    \item $\hat{y}_i$: valor predicho por el modelo
+\end{itemize}
+
+\subsection*{Interpretación}
+El \textbf{Mean Squared Error (MSE)} mide el error cuadrático promedio entre las predicciones y los valores reales.
+Cada diferencia se eleva al cuadrado, eliminando los signos y amplificando los errores grandes, lo que genera una medida global del desempeño del modelo.
+
+\subsection*{Propiedades clave}
+\begin{itemize}
+    \item Es siempre \textbf{no negativa}: $MSE \ge 0$. Un valor de 0 indica predicciones perfectas.
+    \item Usa la \textbf{distancia L2 (Euclidiana)} como referencia geométrica.
+    \item Es \textbf{sensible a valores atípicos}, ya que los errores grandes se amplifican cuadráticamente.
+    \item Es una función \textbf{convexa y diferenciable}, lo que permite optimización eficiente.
+\end{itemize}
+
+\subsection*{Relaciones importantes}
+\[
+MSE = \text{Bias}^2 + \text{Varianza} + \text{Error irreducible}
+\]
+\noindent
+y su relación con otras métricas:
+\begin{itemize}
+    \item $RMSE = \sqrt{MSE}$ devuelve las unidades originales.
+    \item $R^2$ compara el MSE del modelo con el MSE de la media.
+\end{itemize}
+
+\subsection*{Resumen}
+La MSE ofrece una medida cuadrática del error promedio, útil cuando se desea penalizar con fuerza los errores grandes.
+Su naturaleza convexa la convierte en una métrica ideal para algoritmos de optimización como regresión lineal y redes neuronales.
+
+\end{document}

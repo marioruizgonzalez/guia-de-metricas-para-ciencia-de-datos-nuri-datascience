@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Guía de Métricas para Ciencia de Datos}
+\author{Mario Ruiz}
+\date{Noviembre 2025}
+
+\begin{document}
+
+% \maketitle
+
+\section*{Reconstruction Error}
+
+\subsection*{Definición general}
+El \textbf{Reconstruction Error (RE)} cuantifica la pérdida de información entre los datos originales y su reconstrucción.  
+Mide la distancia entre la matriz original $X$ y su versión reconstruida $\hat{X}$, utilizando la norma euclidiana al cuadrado.
+
+\subsection*{Fórmula principal}
+\[
+RE = \| X - \hat{X} \|^2
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $X$: matriz de datos originales $(n \times d)$.
+    \item $\hat{X}$: matriz reconstruida $(n \times d)$.
+    \item $\| \cdot \|^2$: norma euclidiana al cuadrado.
+\end{itemize}
+
+\subsection*{Desglose por componentes}
+\paragraph{1. Error por muestra}
+\[
+RE_i = \sum_{j=1}^{d} (x_{ij} - \hat{x}_{ij})^2
+\]
+
+\paragraph{2. Error promedio}
+\[
+RE_{\text{mean}} = \frac{1}{n} \sum_{i=1}^{n} RE_i
+\]
+
+\paragraph{3. Error relativo (normalizado)}
+\[
+RE_{\text{rel}} = \frac{\| X - \hat{X} \|^2}{\| X \|^2}
+\]
+
+\subsection*{Aplicación en PCA}
+Para PCA con $k$ componentes principales:
+\[
+Z = X W_k
+\]
+\[
+\hat{X} = Z W_k^T = X W_k W_k^T
+\]
+\[
+RE = \| X - X W_k W_k^T \|^2
+\]
+
+\noindent
+Donde:
+\begin{itemize}
+    \item $W_k$: matriz de los primeros $k$ eigenvectores $(d \times k)$.
+    \item $Z$: proyección de $X$ al subespacio reducido $(n \times k)$.
+\end{itemize}
+
+\subsection*{Interpretación matemática}
+\begin{itemize}
+    \item \textbf{Interpretación geométrica:} El $RE$ mide la distancia entre un punto original y su proyección reconstruida en el subespacio de menor dimensión.
+    \item \textbf{Relación con la varianza:} En PCA, el error de reconstrucción está ligado a la \textit{varianza no explicada}:
+    \[
+    \text{Varianza no explicada} = \sum_{i=k+1}^{d} \lambda_i
+    \]
+    \item \textbf{Propiedad de optimalidad:} PCA minimiza el $RE$ entre todas las proyecciones lineales de rango $k$, siendo la solución óptima de mínima pérdida.
+\end{itemize}
+
+\subsection*{Por qué funciona como métrica}
+\begin{itemize}
+    \item \textbf{Sensibilidad a pérdida de información:} Refleja directamente cuánta información se descarta en la reducción dimensional.
+    \item \textbf{Comparabilidad:} Permite comparar distintas técnicas de reducción (PCA, Autoencoders, SVD, etc.).
+    \item \textbf{Selección de parámetros:} Ayuda a determinar el número óptimo de componentes conservando un nivel deseado de reconstrucción.
+    \item \textbf{Detección de anomalías:} Errores elevados pueden señalar observaciones atípicas o estructuras no capturadas por el modelo.
+\end{itemize}
+
+\subsection*{Conclusión}
+El \textbf{Reconstruction Error} es una métrica fundamental para evaluar la eficiencia de modelos de reducción dimensional.  
+Su naturaleza geométrica y relación directa con la varianza perdida la convierten en una herramienta esencial para analizar la calidad de representaciones comprimidas, tanto en PCA como en autoencoders y otros métodos de aprendizaje no supervisado.
+
+\end{document}
