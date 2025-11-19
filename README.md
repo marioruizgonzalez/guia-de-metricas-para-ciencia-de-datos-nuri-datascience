@@ -43,7 +43,5 @@ Cada métrica incluye:
 Científico de datos y fundador de [NURI Data Science](https://nuridatascience.com), una plataforma educativa enfocada en formar profesionales capaces de pensar con criterio analítico y técnico.  
 Con más de trece años de experiencia en tecnología, combina su conocimiento en programación, estadística y machine learning para enseñar desde la práctica y no desde la teoría.
 
----
 
-## 📂 Estructura del repositorio
 
